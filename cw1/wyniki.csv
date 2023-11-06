@@ -1,4 +1,4 @@
-"Ilość bajtów","Ilość cykli","Czas trwania wszystkich operacji - Blokujące","Szybkość łącza - Blokujące","Czas wykonania pojedynczej operacji - Blokujące","Czas trwania wszystkich operacji - Nieblokujące","Szybkość łącza - Nieblokujące","Czas wykonania pojedynczej operacji - Nieblokujące"
+"Ilość bajtów","Ilość cykli","Czas trwania wszystkich operacji - Blokujące","Przepustowość łącza - Blokujące","Czas wykonania pojedynczej operacji - Blokujące","Czas trwania wszystkich operacji - Nieblokujące","Przepustowość łącza - Nieblokujące","Czas wykonania pojedynczej operacji - Nieblokujące"
 1, 1, 0.000016, 124556.266228, 0.000008, 0.000243, 8214.395731, 0.000122
 1, 2, 0.000133, 30002.100098, 0.000033, 0.000189, 21146.902236, 0.000047
 1, 4, 0.000501, 15963.475573, 0.000063, 0.000371, 21581.084172, 0.000046
