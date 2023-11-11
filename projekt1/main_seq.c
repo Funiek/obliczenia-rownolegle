@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <math.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
@@ -23,7 +24,7 @@ void swap(int *a, int *b) {
     *b = temp;
 }
 
-void insertion_sort(int* arr, int n) {
+void insertion_sort(i8* arr, int n) {
     int i, key, j;
     for (i = 1; i < n; i++) {
         key = arr[i];
@@ -91,11 +92,85 @@ Pixel* convert_to_grayscale(Pixel* pixels, int width, int height) {
     return new_pixels;
 }
 
+int multiply_and_add(i8* arr, int* kernel, int N) {
+    int sum = 0;
+    
+    for(int i = 0; i < N; i++) {
+        sum += arr[i] * kernel[i];
+    }
+
+    return sum;
+}
+
+Pixel* sobel_operator(Pixel* pixels, int width, int height) {
+    Pixel* new_pixels = (Pixel*)malloc(width*height*sizeof(Pixel));
+    i8 gray_color;
+    i8 sobel_prep[9];
+    int x_kernel[9] = {-1, 0, 1,
+                       -2, 0, 2,
+                       -1, 0, 1};
+    int y_kernel[9] = {-1, -2, -1,
+                       0, 0, 0,
+                       1, 2, 1};
+    int g_x, g_y, g;
+
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
+            //gray_color = pixels[i*width+j].r;
+
+            sobel_prep[0] = pixels[(i-1)*width+j-1].r;    sobel_prep[1] = pixels[(i-1)*width+j].r;    sobel_prep[2] = pixels[(i-1)*width+j+1].r;
+            sobel_prep[3] = pixels[(i)*width+j-1].r;      sobel_prep[4] = pixels[(i)*width+j].r;      sobel_prep[5] = pixels[(i)*width+j+1].r;
+            sobel_prep[6] = pixels[(i+1)*width+j-1].r;    sobel_prep[7] = pixels[(i+1)*width+j].r;    sobel_prep[8] = pixels[(i+1)*width+j+1].r;
+
+            g_x = multiply_and_add(sobel_prep, x_kernel, 9);
+            g_y = multiply_and_add(sobel_prep, y_kernel, 9);
+            g = sqrt((g_x * g_x) + (g_y * g_y));
+
+
+            new_pixels[i*width+j].r = g;
+            new_pixels[i*width+j].g = g;
+            new_pixels[i*width+j].b = g;
+        }
+    }
+
+    return new_pixels;
+}
+
+Pixel* sobel_normalize(Pixel* pixels, int width, int height) {
+    Pixel* new_pixels = (Pixel*)malloc(width*height*sizeof(Pixel));
+    i8 max = pixels[0].r;
+    i8 min = pixels[0].r;
+    i8 norm_value;
+
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            if (pixels[(i)*width+j].r > max) {
+                max = pixels[(i)*width+j].r;
+            }
+            if (pixels[(i)*width+j].r < min) {
+                min = pixels[(i)*width+j].r;
+            }
+        }
+    }
+
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            norm_value = (i8)(((double)(pixels[(i)*width+j].r - min) / (double)(max - min)) * 255.0);
+
+            new_pixels[i*width+j].r = norm_value;
+            new_pixels[i*width+j].g = norm_value;
+            new_pixels[i*width+j].b = norm_value;
+        }
+    }
+
+    return new_pixels;
+}
+
 Pixel* median(Pixel* pixels, int width, int height) {
     Pixel* new_pixels = (Pixel*)malloc(width*height*sizeof(Pixel));
-    int matrix_r[9];
-    int matrix_g[9];
-    int matrix_b[9];
+    i8 matrix_r[9];
+    i8 matrix_g[9];
+    i8 matrix_b[9];
 
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
@@ -167,29 +242,37 @@ int main(int argc, char **argv)
 
     printf("%d %d %d\n\n", width, height, bpp);
 
-    Pixel* lena_grayscale_pixels = convert_to_grayscale(pixels, width, height);
-    i8* lena_grayscale = convert_pixels_to_image(lena_grayscale_pixels, width, height);
+    Pixel* grayscale_pixels = convert_to_grayscale(pixels, width, height);
+    i8* grayscale = convert_pixels_to_image(grayscale_pixels, width, height);
+    save_image_png("engine_grayscale.png", grayscale, width, height);
+    
+    Pixel* sobel_operator_pixels = sobel_operator(grayscale_pixels, width, height);
+    Pixel* sobel_pixels = sobel_normalize(sobel_operator_pixels, width, height);
+    i8* sobel = convert_pixels_to_image(sobel_pixels, width, height);
+    
     // print_image(pixels, 8, 8);
-    
-    
-    // save_image_png("lena_grayscale.png", lena_grayscale, width, height);
+
+    save_image_png("engine_sobel.png", sobel, width, height);
 
 
     int** histogram = histogram_values(pixels, width, height);
 
-    // for(int i = 0; i < 256; i++) {
-    //     printf("%d. r: %d g: %d b: %d\n", i, histogram[0][i], histogram[1][i], histogram[2][i]);
-    // }
+    for(int i = 0; i < 256; i++) {
+        printf("%d. r: %d g: %d b: %d\n", i, histogram[0][i], histogram[1][i], histogram[2][i]);
+    }
 
 
-    Pixel* mak_median_pixels = median(pixels, width, height);
-    i8* mak_median = convert_pixels_to_image(mak_median_pixels, width, height);
-    save_image_png("mak_median.png", mak_median, width, height);
+    // Pixel* mak_median_pixels = median(pixels, width, height);
+    // i8* mak_median = convert_pixels_to_image(mak_median_pixels, width, height);
+    // save_image_png("mak_median.png", mak_median, width, height);
 
     stbi_image_free(rgb_image);
-    stbi_image_free(lena_grayscale);
+    stbi_image_free(sobel);
+    stbi_image_free(grayscale);
     free(pixels);
-    free(lena_grayscale_pixels);
+    free(grayscale_pixels);
+    free(sobel_operator_pixels);
+    free(sobel_pixels);
     array2D_free(histogram, CHANNELS);
 
     return 0;
