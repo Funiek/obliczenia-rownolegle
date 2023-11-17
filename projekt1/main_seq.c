@@ -236,6 +236,9 @@ int main(int argc, char **argv)
 {
     int width, height, bpp;
     char* image_path = argv[1];
+    char image_path_gray[strlen(image_path)+15];
+    char image_path_sobel[strlen(image_path)+11];
+    char image_path_median[strlen(image_path)+12];
 
     i8* rgb_image = stbi_load(image_path, &width, &height, &bpp, CHANNELS);
     Pixel* pixels = convert_image_to_pixels(rgb_image, width, height);
@@ -244,15 +247,18 @@ int main(int argc, char **argv)
 
     Pixel* grayscale_pixels = convert_to_grayscale(pixels, width, height);
     i8* grayscale = convert_pixels_to_image(grayscale_pixels, width, height);
-    save_image_png("engine_grayscale.png", grayscale, width, height);
+
+    strcpy(image_path_gray, image_path);
+    strcat(image_path_gray,"_grayscale.png");
+    save_image_png(image_path_gray, grayscale, width, height);
     
     Pixel* sobel_operator_pixels = sobel_operator(grayscale_pixels, width, height);
     Pixel* sobel_pixels = sobel_normalize(sobel_operator_pixels, width, height);
     i8* sobel = convert_pixels_to_image(sobel_pixels, width, height);
-    
-    // print_image(pixels, 8, 8);
 
-    save_image_png("engine_sobel.png", sobel, width, height);
+    strcpy(image_path_sobel, image_path);
+    strcat(image_path_sobel,"_sobel.png");
+    save_image_png(image_path_sobel, sobel, width, height);
 
 
     int** histogram = histogram_values(pixels, width, height);
@@ -262,17 +268,22 @@ int main(int argc, char **argv)
     }
 
 
-    // Pixel* mak_median_pixels = median(pixels, width, height);
-    // i8* mak_median = convert_pixels_to_image(mak_median_pixels, width, height);
-    // save_image_png("mak_median.png", mak_median, width, height);
+    Pixel* image_median_pixels = median(pixels, width, height);
+    i8* image_median = convert_pixels_to_image(image_median_pixels, width, height);
+
+    strcpy(image_path_median, image_path);
+    strcat(image_path_median,"_median.png");
+    save_image_png(image_path_median, image_median, width, height);
 
     stbi_image_free(rgb_image);
     stbi_image_free(sobel);
     stbi_image_free(grayscale);
+    stbi_image_free(image_median);
     free(pixels);
     free(grayscale_pixels);
     free(sobel_operator_pixels);
     free(sobel_pixels);
+    free(image_median_pixels);
     array2D_free(histogram, CHANNELS);
 
     return 0;
