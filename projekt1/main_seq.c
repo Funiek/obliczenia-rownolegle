@@ -236,9 +236,14 @@ int main(int argc, char **argv)
 {
     int width, height, bpp;
     char* image_path = argv[1];
-    char image_path_gray[strlen(image_path)+15];
-    char image_path_sobel[strlen(image_path)+11];
-    char image_path_median[strlen(image_path)+12];
+    char image_name[100];
+    strcpy(image_name, image_path);
+    image_name[strlen(image_path)-4] = '\0';
+
+    char image_path_gray[strlen(image_name)+11];
+    char image_path_sobel[strlen(image_name)+7];
+    char image_path_median[strlen(image_name)+8];
+    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
 
     i8* rgb_image = stbi_load(image_path, &width, &height, &bpp, CHANNELS);
     Pixel* pixels = convert_image_to_pixels(rgb_image, width, height);
@@ -248,7 +253,8 @@ int main(int argc, char **argv)
     Pixel* grayscale_pixels = convert_to_grayscale(pixels, width, height);
     i8* grayscale = convert_pixels_to_image(grayscale_pixels, width, height);
 
-    strcpy(image_path_gray, image_path);
+    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+    strcpy(image_path_gray, image_name);
     strcat(image_path_gray,"_grayscale.png");
     save_image_png(image_path_gray, grayscale, width, height);
     
@@ -256,22 +262,24 @@ int main(int argc, char **argv)
     Pixel* sobel_pixels = sobel_normalize(sobel_operator_pixels, width, height);
     i8* sobel = convert_pixels_to_image(sobel_pixels, width, height);
 
-    strcpy(image_path_sobel, image_path);
+    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+    strcpy(image_path_sobel, image_name);
     strcat(image_path_sobel,"_sobel.png");
     save_image_png(image_path_sobel, sobel, width, height);
 
 
     int** histogram = histogram_values(pixels, width, height);
 
-    for(int i = 0; i < 256; i++) {
-        printf("%d. r: %d g: %d b: %d\n", i, histogram[0][i], histogram[1][i], histogram[2][i]);
-    }
+    // for(int i = 0; i < 256; i++) {
+    //     printf("%d. r: %d g: %d b: %d\n", i, histogram[0][i], histogram[1][i], histogram[2][i]);
+    // }
 
 
     Pixel* image_median_pixels = median(pixels, width, height);
     i8* image_median = convert_pixels_to_image(image_median_pixels, width, height);
 
-    strcpy(image_path_median, image_path);
+    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+    strcpy(image_path_median, image_name);
     strcat(image_path_median,"_median.png");
     save_image_png(image_path_median, image_median, width, height);
 

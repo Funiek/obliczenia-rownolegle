@@ -1,3 +1,5 @@
 stb/
 stb
 main
+\.main
+.main
