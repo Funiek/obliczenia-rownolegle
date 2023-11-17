@@ -114,8 +114,8 @@ Pixel* sobel_operator(Pixel* pixels, int width, int height) {
                        1, 2, 1};
     int g_x, g_y, g;
 
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++) {
+    for(int i = 1; i < height - 1; i++) {
+        for(int j = 1; j < width - 1; j++) {
             //gray_color = pixels[i*width+j].r;
 
             sobel_prep[0] = pixels[(i-1)*width+j-1].r;    sobel_prep[1] = pixels[(i-1)*width+j].r;    sobel_prep[2] = pixels[(i-1)*width+j+1].r;
