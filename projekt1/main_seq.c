@@ -123,15 +123,15 @@ Pixel* sobel_operator(Pixel* pixels, int width, int height) {
             // 0 1 2
             // 3 4 5
             // 6 7 8
-            sobel_prep[0] = (i-1 >= 0 && j-1 >= 0) ? pixels[(i-1)*width+j-1].r : 128;    
-            sobel_prep[1] = (i-1 >= 0) ? pixels[(i-1)*width+j].r : 128;   
-            sobel_prep[2] = (i-1 >= 0 && j+1 < width) ? pixels[(i-1)*width+j+1].r : 128;
-            sobel_prep[3] = (j-1 >= 0) ? pixels[(i)*width+j-1].r : 128;     
+            sobel_prep[0] = (i-1 >= 0 && j-1 >= 0) ? pixels[(i-1)*width+j-1].r : pixels[(i)*width+j].r;    
+            sobel_prep[1] = (i-1 >= 0) ? pixels[(i-1)*width+j].r : pixels[(i)*width+j].r;   
+            sobel_prep[2] = (i-1 >= 0 && j+1 < width) ? pixels[(i-1)*width+j+1].r : pixels[(i)*width+j].r;
+            sobel_prep[3] = (j-1 >= 0) ? pixels[(i)*width+j-1].r : pixels[(i)*width+j].r;     
             sobel_prep[4] = pixels[(i)*width+j].r;      
-            sobel_prep[5] = (j+1 < width) ? pixels[(i)*width+j+1].r : 128;
-            sobel_prep[6] = (i+1 < height && j-1 >= 0) ? pixels[(i+1)*width+j-1].r : 128;   
-            sobel_prep[7] = (i+1 < height) ? pixels[(i+1)*width+j].r : 128;  
-            sobel_prep[8] = (i+1 < height && j+1 < width) ? pixels[(i+1)*width+j+1].r : 128;
+            sobel_prep[5] = (j+1 < width) ? pixels[(i)*width+j+1].r : pixels[(i)*width+j].r;
+            sobel_prep[6] = (i+1 < height && j-1 >= 0) ? pixels[(i+1)*width+j-1].r : pixels[(i)*width+j].r;   
+            sobel_prep[7] = (i+1 < height) ? pixels[(i+1)*width+j].r : pixels[(i)*width+j].r;  
+            sobel_prep[8] = (i+1 < height && j+1 < width) ? pixels[(i+1)*width+j+1].r : pixels[(i)*width+j].r;
 
             g_x = multiply_and_add(sobel_prep, x_kernel, 9);
             g_y = multiply_and_add(sobel_prep, y_kernel, 9);
