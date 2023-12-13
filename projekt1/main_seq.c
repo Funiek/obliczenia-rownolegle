@@ -41,25 +41,13 @@ void insertion_sort(i8* arr, int n) {
     }
 }
 
-Pixel* convert_image_to_pixels(i8* rgb_image, int width, int height, int padding) {
-    // Pixel* pixels = (Pixel*)malloc((width + padding) * (height + padding) * sizeof(Pixel));
+Pixel* convert_image_to_pixels(i8* rgb_image, int width, int height) {
     Pixel* pixels = (Pixel*)malloc((width) * (height) * sizeof(Pixel));
 
     for(int i = 0; i < width*height*CHANNELS; i+=CHANNELS) {
         pixels[i/CHANNELS].r = rgb_image[i];
         pixels[i/CHANNELS].g = rgb_image[i+1];
         pixels[i/CHANNELS].b = rgb_image[i+2];
-    }
-
-    int idx;
-    for(int i = 0; i < width*height*CHANNELS; i+=CHANNELS) {
-        for (int j = 0; j < height; j++) {
-            idx = (i * width + j) * CHANNELS;
-            pixels[i * width + j].r = rgb_image[idx];
-            pixels[i * width + j].g = rgb_image[idx + 1];
-            pixels[i * width + j].b = rgb_image[idx + 2];
-        }
-        
     }
 
     return pixels;
@@ -84,7 +72,7 @@ int save_image_png(char const* file_name, i8* rgb_image, int width, int height) 
 void print_image(Pixel* pixels, int width, int height) {
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            printf("[%d %d %d] ",pixels[i*width+j].r, pixels[i*width+j].g, pixels[i*width+j].b);
+            printf("[%hhu %hhu %hhu] ",pixels[i*width+j].r, pixels[i*width+j].g, pixels[i*width+j].b);
         }
         printf("\n");
     }
@@ -129,12 +117,21 @@ Pixel* sobel_operator(Pixel* pixels, int width, int height) {
                        1, 2, 1};
     int g_x, g_y, g;
 
-    for(int i = 1; i < height - 1; i++) {
-        for(int j = 1; j < width - 1; j++) {
+    for(int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++) {
 
-            sobel_prep[0] = pixels[(i-1)*width+j-1].r;    sobel_prep[1] = pixels[(i-1)*width+j].r;    sobel_prep[2] = pixels[(i-1)*width+j+1].r;
-            sobel_prep[3] = pixels[(i)*width+j-1].r;      sobel_prep[4] = pixels[(i)*width+j].r;      sobel_prep[5] = pixels[(i)*width+j+1].r;
-            sobel_prep[6] = pixels[(i+1)*width+j-1].r;    sobel_prep[7] = pixels[(i+1)*width+j].r;    sobel_prep[8] = pixels[(i+1)*width+j+1].r;
+            // 0 1 2
+            // 3 4 5
+            // 6 7 8
+            sobel_prep[0] = (i-1 >= 0 && j-1 >= 0) ? pixels[(i-1)*width+j-1].r : pixels[(i)*width+j].r;    
+            sobel_prep[1] = (i-1 >= 0) ? pixels[(i-1)*width+j].r : pixels[(i)*width+j].r;   
+            sobel_prep[2] = (i-1 >= 0 && j+1 < width) ? pixels[(i-1)*width+j+1].r : pixels[(i)*width+j].r;
+            sobel_prep[3] = (j-1 >= 0) ? pixels[(i)*width+j-1].r : pixels[(i)*width+j].r;     
+            sobel_prep[4] = pixels[(i)*width+j].r;      
+            sobel_prep[5] = (j+1 < width) ? pixels[(i)*width+j+1].r : pixels[(i)*width+j].r;
+            sobel_prep[6] = (i+1 < height && j-1 >= 0) ? pixels[(i+1)*width+j-1].r : pixels[(i)*width+j].r;   
+            sobel_prep[7] = (i+1 < height) ? pixels[(i+1)*width+j].r : pixels[(i)*width+j].r;  
+            sobel_prep[8] = (i+1 < height && j+1 < width) ? pixels[(i+1)*width+j+1].r : pixels[(i)*width+j].r;
 
             g_x = multiply_and_add(sobel_prep, x_kernel, 9);
             g_y = multiply_and_add(sobel_prep, y_kernel, 9);
@@ -262,7 +259,7 @@ int main(int argc, char **argv)
 
     // konwersja zdjęcia do tablicy intów
     i8* rgb_image = stbi_load(image_path, &width, &height, &bpp, CHANNELS);
-    Pixel* pixels = convert_image_to_pixels(rgb_image, width, height, 1);
+    Pixel* pixels = convert_image_to_pixels(rgb_image, width, height);
     printf("%d %d %d\n\n", width, height, bpp);
 
     // konwersja do skali szarości
