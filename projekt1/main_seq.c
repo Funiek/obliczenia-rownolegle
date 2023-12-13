@@ -239,49 +239,57 @@ int main(int argc, char **argv)
     strcpy(image_name, image_path);
     image_name[strlen(image_path)-4] = '\0';
 
+    // stringi na nazwy filtrów do zapisu do plików
     char image_path_gray[strlen(image_name)+11];
     char image_path_sobel[strlen(image_name)+7];
     char image_path_median[strlen(image_name)+8];
     printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
 
+    // konwersja zdjęcia do tablicy intów
     i8* rgb_image = stbi_load(image_path, &width, &height, &bpp, CHANNELS);
     Pixel* pixels = convert_image_to_pixels(rgb_image, width, height);
-
     printf("%d %d %d\n\n", width, height, bpp);
 
+    // konwersja do skali szarości
     Pixel* grayscale_pixels = convert_to_grayscale(pixels, width, height);
     i8* grayscale = convert_pixels_to_image(grayscale_pixels, width, height);
-
     printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+    
+    // zapis zdjęcia w skali szarości do pliku
     strcpy(image_path_gray, image_name);
     strcat(image_path_gray,"_grayscale.png");
     save_image_png(image_path_gray, grayscale, width, height);
     
+    // zapis zdjęcia po filtrze z operatorem sobela do pliku
     Pixel* sobel_operator_pixels = sobel_operator(grayscale_pixels, width, height);
     Pixel* sobel_pixels = sobel_normalize(sobel_operator_pixels, width, height);
     i8* sobel = convert_pixels_to_image(sobel_pixels, width, height);
-
     printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+    
     strcpy(image_path_sobel, image_name);
     strcat(image_path_sobel,"_sobel.png");
     save_image_png(image_path_sobel, sobel, width, height);
 
 
+    // obliczenie histogramu
     int** histogram = histogram_values(pixels, width, height);
 
+    // wypisanie histogramu
     // for(int i = 0; i < 256; i++) {
     //     printf("%d. r: %d g: %d b: %d\n", i, histogram[0][i], histogram[1][i], histogram[2][i]);
     // }
 
-
+    // zastosowanie filtru medianowego (nowa tablica wynikowa)
     Pixel* image_median_pixels = median(pixels, width, height);
     i8* image_median = convert_pixels_to_image(image_median_pixels, width, height);
-
     printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+    
+    // zapis zdjęcia z zastosowanym filtrem medianowym
     strcpy(image_path_median, image_name);
     strcat(image_path_median,"_median.png");
     save_image_png(image_path_median, image_median, width, height);
 
+    // zwalnianie pamięci
     stbi_image_free(rgb_image);
     stbi_image_free(sobel);
     stbi_image_free(grayscale);
