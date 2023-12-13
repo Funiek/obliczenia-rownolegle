@@ -12,6 +12,9 @@
 #define i8 uint8_t
 #define CHANNELS 3
 
+// TODO obsłużyć żeby sobel poprawnie działał dla rogów zdjęcia i widzę dwa sposoby: nakładanie paddingnu przy tworzeniu tablicy Pixel na podstawie zdjęcia
+// albo dodanie warunków if przy sobelu
+
 typedef struct Pixel {
     i8 r;
     i8 g;
@@ -38,13 +41,25 @@ void insertion_sort(i8* arr, int n) {
     }
 }
 
-Pixel* convert_image_to_pixels(i8* rgb_image, int width, int height) {
-    Pixel* pixels = (Pixel*)malloc(width*height*sizeof(Pixel));
+Pixel* convert_image_to_pixels(i8* rgb_image, int width, int height, int padding) {
+    // Pixel* pixels = (Pixel*)malloc((width + padding) * (height + padding) * sizeof(Pixel));
+    Pixel* pixels = (Pixel*)malloc((width) * (height) * sizeof(Pixel));
 
     for(int i = 0; i < width*height*CHANNELS; i+=CHANNELS) {
         pixels[i/CHANNELS].r = rgb_image[i];
         pixels[i/CHANNELS].g = rgb_image[i+1];
         pixels[i/CHANNELS].b = rgb_image[i+2];
+    }
+
+    int idx;
+    for(int i = 0; i < width*height*CHANNELS; i+=CHANNELS) {
+        for (int j = 0; j < height; j++) {
+            idx = (i * width + j) * CHANNELS;
+            pixels[i * width + j].r = rgb_image[idx];
+            pixels[i * width + j].g = rgb_image[idx + 1];
+            pixels[i * width + j].b = rgb_image[idx + 2];
+        }
+        
     }
 
     return pixels;
@@ -247,7 +262,7 @@ int main(int argc, char **argv)
 
     // konwersja zdjęcia do tablicy intów
     i8* rgb_image = stbi_load(image_path, &width, &height, &bpp, CHANNELS);
-    Pixel* pixels = convert_image_to_pixels(rgb_image, width, height);
+    Pixel* pixels = convert_image_to_pixels(rgb_image, width, height, 1);
     printf("%d %d %d\n\n", width, height, bpp);
 
     // konwersja do skali szarości
