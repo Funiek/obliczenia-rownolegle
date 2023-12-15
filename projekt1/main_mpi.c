@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <math.h>
 #include <time.h>
+#include <mpi.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
@@ -259,30 +260,46 @@ ts diff_ts(ts start, ts end) {
 
 int main(int argc, char **argv)
 {
+    MPI_Init(&argc, &argv);
+
+    int rank, size;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
     int width, height, bpp;
-    char* image_path = argv[1];
-    char image_name[100];
-    strcpy(image_name, image_path);
-    image_name[strlen(image_path)-4] = '\0';
     ts sobel_t1, sobel_t2, median_t1, median_t2, histogram_t1, histogram_t2;
 
-    // stringi na nazwy filtrów do zapisu do plików
-    char image_path_gray[strlen(image_name)+11];
-    char image_path_sobel[strlen(image_name)+7];
-    char image_path_median[strlen(image_name)+8];
-    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+    if (rank == 0) {
+        char* image_path = argv[1];
+        char image_name[100];
+        strcpy(image_name, image_path);
+        image_name[strlen(image_path)-4] = '\0';
+        // stringi na nazwy filtrów do zapisu do plików
+        char image_path_gray[strlen(image_name)+11];
+        char image_path_sobel[strlen(image_name)+7];
+        char image_path_median[strlen(image_name)+8];
 
-    // konwersja zdjęcia do tablicy intów
-    i8* rgb_image = stbi_load(image_path, &width, &height, &bpp, CHANNELS);
-    Pixel* pixels = convert_image_to_pixels(rgb_image, width, height);
-    printf("%d %d %d\n\n", width, height, bpp);
+        // konwersja zdjęcia do tablicy intów
+        i8* rgb_image = stbi_load(image_path, &width, &height, &bpp, CHANNELS);
+        Pixel* pixels = convert_image_to_pixels(rgb_image, width, height);
+        printf("%d %d %d\n\n", width, height, bpp);
 
-    // konwersja do skali szarości
-    Pixel* grayscale_pixels = convert_to_grayscale(pixels, width, height);
-    i8* grayscale = convert_pixels_to_image(grayscale_pixels, width, height);
-    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+        MPI_Barrier(MPI_COMM_WORLD);
+    }
+    else {
+        // konwersja do skali szarości
+        Pixel* grayscale_pixels = convert_to_grayscale(pixels, width, height);
+        i8* grayscale = convert_pixels_to_image(grayscale_pixels, width, height);
+    }
+    
+
+    
+
+   
+    
     
     // zapis zdjęcia w skali szarości do pliku
+    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
     strcpy(image_path_gray, image_name);
     strcat(image_path_gray,"_grayscale.png");
     save_image_png(image_path_gray, grayscale, width, height);
@@ -338,6 +355,8 @@ int main(int argc, char **argv)
     free(sobel_pixels);
     free(image_median_pixels);
     array2D_free(histogram, CHANNELS);
+
+    MPI_Finalize();
 
     return 0;
 }
