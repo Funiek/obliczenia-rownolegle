@@ -105,26 +105,26 @@ int main(int argc, char **argv)
     MPI_Barrier(MPI_COMM_WORLD);
 
     // kopiowanie wysokości i szerokości obrazka do innych procesów
-    // MPI_Bcast(&width, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    // MPI_Bcast(&height, 1, MPI_INT, 0, MPI_COMM_WORLD);
-
+    MPI_Bcast(&width, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&height, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    
     local_start = rank * ((width * height) / size);
     local_end = (rank == size - 1) ? (width * height) : (rank + 1) * ((width * height) / size);
+    printf("id: %d w: %d h: %d start: %d end: %d\n", rank, width, height, local_start, local_end);
 
     // kopiowanie obrazka do innych procesów
-    // MPI_Bcast(local_grayscale, local_end - local_start, MPI_UINT8_T, 0, MPI_COMM_WORLD);
+    if(rank != 0) {
+        grayscale = (i8*)malloc(width * height * sizeof(i8));
+    }
+    MPI_Bcast(grayscale, width * height, MPI_UINT8_T, 0, MPI_COMM_WORLD);
 
-    
-
-    
-    
     // obliczenie histogramu
     histogram_t1 = MPI_Wtime();
-    // for (int i = local_start; i < local_end; i++) {
-    //     local_histogram[grayscale[i]]++;
-    // }
+    for (int i = local_start; i < local_end; i++) {
+        local_histogram[grayscale[i]]++;
+    }
 
-    // MPI_Reduce(local_histogram, histogram, 256, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(local_histogram, histogram, 256, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     histogram_t2 = MPI_Wtime();
 
     // wypisanie histogramu
@@ -139,12 +139,12 @@ int main(int argc, char **argv)
     if(rank == 0) {
         // zwalnianie pamięci
         stbi_image_free(rgb_image);
-        free(grayscale);
         free(pixels);
         free(grayscale_pixels);
         free(grayscale_in_RGB);
     }
-    free(local_grayscale);
+    free(grayscale);
+    // free(local_grayscale);
 
     MPI_Finalize();
     return 0;

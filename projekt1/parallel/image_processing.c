@@ -104,7 +104,6 @@ i8* median(i8* pixels, int width, int height) {
     i8* new_pixels = (i8*)malloc(width*height*sizeof(i8));
     i8 matrix[9];
 
-    // TODO warunki brzegowe
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
             if(i>0 && i < height - 1 && j > 0 && j < width - 1) {
@@ -126,15 +125,8 @@ i8* median(i8* pixels, int width, int height) {
     return new_pixels;
 }
 
-void histogram_values(i8* image, int* histogram, int width, int height) {
-    for(int i = 0; i < 256; i++) {
-        histogram[i] = 0;
-    }
-
-
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++) {
-            histogram[image[i*width+j]]++;
-        }
+void histogram_values(i8* image, int* histogram, int start, int end) {
+    for (int i = start; i < end; i++) {
+        histogram[image[i]]++;
     }
 }
