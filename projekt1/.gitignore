@@ -3,3 +3,4 @@ stb
 main
 \.main
 .main
+stb/*
