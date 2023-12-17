@@ -4,3 +4,6 @@ main
 \.main
 .main
 stb/*
+img
+img/
+img/*
