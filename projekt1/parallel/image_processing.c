@@ -100,28 +100,38 @@ i8* sobel_normalize(i8* pixels, int width, int height) {
     return new_pixels;
 }
 
-i8* median(i8* pixels, int width, int height) {
-    i8* new_pixels = (i8*)malloc(width*height*sizeof(i8));
+i8* median(i8* pixels, int width, int height, int start, int end) {
+    printf("dupa1 %d %d %d\n", start, end, end-start);
+    i8* new_pixels = (i8*)malloc((end-start)*sizeof(i8));
     i8 matrix[9];
+    printf("dupa2\n");
+    // TODO warunek brzegowy
+    for(int i = start; i < end; i++) {
+        // 0 1 2
+        // 3 4 5
+        // 6 7 8
+        if((i > width) && (i%width != 0) && (i%width != width-1) && ((width*height - width) > i)) {
+            matrix[0] = pixels[i-1-width];
+            matrix[1] = pixels[i-width];
+            matrix[2] = pixels[i+1-width];
+            matrix[3] = pixels[i-1];      
+            matrix[4] = pixels[i];      
+            matrix[5] = pixels[i+1];
+            matrix[6] = pixels[i-1+width];
+            matrix[7] = pixels[i+width];
+            matrix[8] = pixels[i+1+width];
 
-    for(int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++) {
-            if(i>0 && i < height - 1 && j > 0 && j < width - 1) {
-                matrix[0] = pixels[(i-1)*width+j-1];    matrix[1] = pixels[(i-1)*width+j];    matrix[2] = pixels[(i-1)*width+j+1];
-                matrix[3] = pixels[(i)*width+j-1];      matrix[4] = pixels[(i)*width+j];      matrix[5] = pixels[(i)*width+j+1];
-                matrix[6] = pixels[(i+1)*width+j-1];    matrix[7] = pixels[(i+1)*width+j];    matrix[8] = pixels[(i+1)*width+j+1];
+            insertion_sort(matrix, 9);
 
-                insertion_sort(matrix, 9);
-
-                new_pixels[i*width+j] = matrix[4];
-            }
-            else {
-                new_pixels[i*width+j] = pixels[i*width+j];
-            }
-            
+            new_pixels[i] = matrix[4];
         }
+        else {
+            new_pixels[i] = pixels[i]; 
+        }
+        
     }
 
+    printf("dupa3\n");
     return new_pixels;
 }
 

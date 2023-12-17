@@ -20,6 +20,9 @@
         "unordered_map": "c",
         "vector": "c",
         "type_traits": "c",
-        "__bit_reference": "c"
+        "__bit_reference": "c",
+        "utils.h": "c",
+        "stdlib.h": "c",
+        "array_conversion.h": "c"
     }
 }

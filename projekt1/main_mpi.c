@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "seq/utils.h"
-#include "seq/array_conversion.h"
-#include "seq/image_processing.h"
+#include "parallel/utils.h"
+#include "parallel/array_conversion.h"
+#include "parallel/image_processing.h"
 #include "mpi.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -41,6 +41,7 @@ int main(int argc, char **argv)
 
     // mediana
     i8* image_median_result;
+    i8* local_image_median_result;
     i8* image_median;
     
     // nazwa zdjecia
@@ -95,10 +96,9 @@ int main(int argc, char **argv)
         // konwersja do skali szarości
         grayscale_pixels = convert_to_grayscale(pixels, width, height);
         grayscale = convert_pixels_to_gray_array(grayscale_pixels, width, height);
-        grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
 
-        // zapis zdjęcia w skali szarości do pliku
-        save_image_png(image_path_gray, grayscale_in_RGB, width, height);
+        // inicjalizacja tabel dla głównego procesu
+        image_median_result = (i8*)malloc(width * height * sizeof(i8));
     }
 
     // wszystkie procesy czekają aż załaduje się zdjęcie
@@ -133,16 +133,36 @@ int main(int argc, char **argv)
             printf("%d. Natężenie: %d\n", i, histogram[i]);
         }
     }
+
+    // czekamy aż procesy wszystkie będą gotowe na wykonanie operacji medianowej
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    // zastosowanie filtru medianowego (nowa tablica wynikowa)
+    median_t1 = MPI_Wtime();
+    local_image_median_result = median(grayscale, width, height, local_start, local_end);
+    // MPI_Gather(local_image_median_result, (local_end - local_start + 1), MPI_UINT8_T, image_median_result, (local_end - local_start + 1), MPI_UINT8_T, 0, MPI_COMM_WORLD);
+    median_t2 = MPI_Wtime();
+    
     
 
-    // główny proces zwalnia miejsce ze zmiennych
+    // główny proces zwalnia miejsce ze zmiennych i zapisuje zdjęcia
     if(rank == 0) {
+        // zapis zdjęcia w skali szarości do pliku
+        grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
+        save_image_png(image_path_gray, grayscale_in_RGB, width, height);
+
+        // zapis zdjęcia z zastosowanym filtrem medianowym
+        // image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
+        // save_image_png(image_path_median, image_median, width, height);
+
         // zwalnianie pamięci
         stbi_image_free(rgb_image);
         free(pixels);
         free(grayscale_pixels);
         free(grayscale_in_RGB);
+        free(image_median_result);
     }
+    free(local_image_median_result);
     free(grayscale);
     // free(local_grayscale);
 
