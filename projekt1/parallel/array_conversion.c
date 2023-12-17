@@ -1,4 +1,4 @@
-#include "array_conversion_seq.h"
+#include "array_conversion.h"
 
 Pixel* convert_image_to_pixels(i8* rgb_image, int width, int height, int channels) {
     Pixel* pixels = (Pixel*)malloc((width) * (height) * sizeof(Pixel));

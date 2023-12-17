@@ -1,9 +1,9 @@
-#ifndef IMAGE_PROCESSING_SEQ_H
-#define IMAGE_PROCESSING_SEQ_H
+#ifndef IMAGE_PROCESSING_H
+#define IMAGE_PROCESSING_H
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "utils_seq.h"
+#include "utils.h"
 #include <math.h>
 
 void print_image(Pixel* pixels, int width, int height);
@@ -14,4 +14,4 @@ i8* sobel_normalize(i8* pixels, int width, int height);
 i8* median(i8* pixels, int width, int height);
 void histogram_values(i8* image, int* histogram, int width, int height);
 
-#endif // IMAGE_PROCESSING_SEQ_H
+#endif // IMAGE_PROCESSING_H

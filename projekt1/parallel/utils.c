@@ -1,4 +1,4 @@
-#include "utils_seq.h"
+#include "utils.h"
 
 void swap(int *a, int *b) {
     int temp = *a;
