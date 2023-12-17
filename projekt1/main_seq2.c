@@ -53,13 +53,23 @@ Pixel* convert_image_to_pixels(i8* rgb_image, int width, int height) {
     return pixels;
 }
 
-i8* convert_pixels_to_image(Pixel* pixels, int width, int height) {
+i8* convert_pixels_to_gray_array(Pixel* pixels, int width, int height) {
+    i8* image = (i8*)malloc(width*height*sizeof(i8));
+
+    for(int i = 0; i < width*height; i++) {
+        image[i] = pixels[i].r;
+    }
+
+    return image;
+}
+
+i8* convert_gray_to_colors_array(i8* image, int width, int height, int channels) {
     i8* rgb_image = (i8*)malloc(width*height*CHANNELS*sizeof(i8));
 
     for(int i = 0; i < width*height*CHANNELS; i+=CHANNELS) {
-        rgb_image[i] = pixels[i/CHANNELS].r;
-        rgb_image[i+1] = pixels[i/CHANNELS].g;
-        rgb_image[i+2] = pixels[i/CHANNELS].b;
+        rgb_image[i] = image[i/CHANNELS];
+        rgb_image[i+1] = image[i/CHANNELS];
+        rgb_image[i+2] = image[i/CHANNELS];
     }
 
     return rgb_image;
@@ -105,8 +115,8 @@ int multiply_and_add(i8* arr, int* kernel, int N) {
     return sum;
 }
 
-Pixel* sobel_operator(Pixel* pixels, int width, int height) {
-    Pixel* new_pixels = (Pixel*)malloc(width*height*sizeof(Pixel));
+i8* sobel_operator(i8* pixels, int width, int height) {
+    i8* new_pixels = (i8*)malloc(width*height*sizeof(i8));
     i8 gray_color;
     i8 sobel_prep[9];
     int x_kernel[9] = {-1, 0, 1,
@@ -123,93 +133,70 @@ Pixel* sobel_operator(Pixel* pixels, int width, int height) {
             // 0 1 2
             // 3 4 5
             // 6 7 8
-            sobel_prep[0] = (i-1 >= 0 && j-1 >= 0) ? pixels[(i-1)*width+j-1].r : pixels[(i)*width+j].r;    
-            sobel_prep[1] = (i-1 >= 0) ? pixels[(i-1)*width+j].r : pixels[(i)*width+j].r;   
-            sobel_prep[2] = (i-1 >= 0 && j+1 < width) ? pixels[(i-1)*width+j+1].r : pixels[(i)*width+j].r;
-            sobel_prep[3] = (j-1 >= 0) ? pixels[(i)*width+j-1].r : pixels[(i)*width+j].r;     
-            sobel_prep[4] = pixels[(i)*width+j].r;      
-            sobel_prep[5] = (j+1 < width) ? pixels[(i)*width+j+1].r : pixels[(i)*width+j].r;
-            sobel_prep[6] = (i+1 < height && j-1 >= 0) ? pixels[(i+1)*width+j-1].r : pixels[(i)*width+j].r;   
-            sobel_prep[7] = (i+1 < height) ? pixels[(i+1)*width+j].r : pixels[(i)*width+j].r;  
-            sobel_prep[8] = (i+1 < height && j+1 < width) ? pixels[(i+1)*width+j+1].r : pixels[(i)*width+j].r;
+            sobel_prep[0] = (i-1 >= 0 && j-1 >= 0) ? pixels[(i-1)*width+j-1] : pixels[(i)*width+j];    
+            sobel_prep[1] = (i-1 >= 0) ? pixels[(i-1)*width+j] : pixels[(i)*width+j];   
+            sobel_prep[2] = (i-1 >= 0 && j+1 < width) ? pixels[(i-1)*width+j+1] : pixels[(i)*width+j];
+            sobel_prep[3] = (j-1 >= 0) ? pixels[(i)*width+j-1] : pixels[(i)*width+j];     
+            sobel_prep[4] = pixels[(i)*width+j];      
+            sobel_prep[5] = (j+1 < width) ? pixels[(i)*width+j+1] : pixels[(i)*width+j];
+            sobel_prep[6] = (i+1 < height && j-1 >= 0) ? pixels[(i+1)*width+j-1] : pixels[(i)*width+j];   
+            sobel_prep[7] = (i+1 < height) ? pixels[(i+1)*width+j] : pixels[(i)*width+j];  
+            sobel_prep[8] = (i+1 < height && j+1 < width) ? pixels[(i+1)*width+j+1] : pixels[(i)*width+j];
 
             g_x = multiply_and_add(sobel_prep, x_kernel, 9);
             g_y = multiply_and_add(sobel_prep, y_kernel, 9);
             g = sqrt((g_x * g_x) + (g_y * g_y));
 
-
-            new_pixels[i*width+j].r = g;
-            new_pixels[i*width+j].g = g;
-            new_pixels[i*width+j].b = g;
+            new_pixels[i*width+j] = g;
         }
     }
 
     return new_pixels;
 }
 
-Pixel* sobel_normalize(Pixel* pixels, int width, int height) {
-    Pixel* new_pixels = (Pixel*)malloc(width*height*sizeof(Pixel));
-    i8 max = pixels[0].r;
-    i8 min = pixels[0].r;
-    i8 norm_value;
+i8* sobel_normalize(i8* pixels, int width, int height) {
+    i8* new_pixels = (i8*)malloc(width*height*sizeof(i8));
+    i8 max = pixels[0];
+    i8 min = pixels[0];
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            if (pixels[(i)*width+j].r > max) {
-                max = pixels[(i)*width+j].r;
+            if (pixels[(i)*width+j] > max) {
+                max = pixels[(i)*width+j];
             }
-            if (pixels[(i)*width+j].r < min) {
-                min = pixels[(i)*width+j].r;
+            if (pixels[(i)*width+j] < min) {
+                min = pixels[(i)*width+j];
             }
         }
     }
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            norm_value = (i8)(((double)(pixels[(i)*width+j].r - min) / (double)(max - min)) * 255.0);
-
-            new_pixels[i*width+j].r = norm_value;
-            new_pixels[i*width+j].g = norm_value;
-            new_pixels[i*width+j].b = norm_value;
+            new_pixels[i*width+j] = (i8)(((double)(pixels[(i)*width+j] - min) / (double)(max - min)) * 255.0); // wartość znormalizowana
         }
     }
 
     return new_pixels;
 }
 
-Pixel* median(Pixel* pixels, int width, int height) {
-    Pixel* new_pixels = (Pixel*)malloc(width*height*sizeof(Pixel));
-    i8 matrix_r[9];
-    i8 matrix_g[9];
-    i8 matrix_b[9];
+i8* median(i8* pixels, int width, int height) {
+    i8* new_pixels = (i8*)malloc(width*height*sizeof(i8));
+    i8 matrix[9];
 
+    // TODO warunki brzegowe
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
             if(i>0 && i < height - 1 && j > 0 && j < width - 1) {
-                matrix_r[0] = pixels[(i-1)*width+j-1].r;    matrix_r[1] = pixels[(i-1)*width+j].r;    matrix_r[2] = pixels[(i-1)*width+j+1].r;
-                matrix_r[3] = pixels[(i)*width+j-1].r;      matrix_r[4] = pixels[(i)*width+j].r;      matrix_r[5] = pixels[(i)*width+j+1].r;
-                matrix_r[6] = pixels[(i+1)*width+j-1].r;    matrix_r[7] = pixels[(i+1)*width+j].r;    matrix_r[8] = pixels[(i+1)*width+j+1].r;
+                matrix[0] = pixels[(i-1)*width+j-1];    matrix[1] = pixels[(i-1)*width+j];    matrix[2] = pixels[(i-1)*width+j+1];
+                matrix[3] = pixels[(i)*width+j-1];      matrix[4] = pixels[(i)*width+j];      matrix[5] = pixels[(i)*width+j+1];
+                matrix[6] = pixels[(i+1)*width+j-1];    matrix[7] = pixels[(i+1)*width+j];    matrix[8] = pixels[(i+1)*width+j+1];
 
-                matrix_g[0] = pixels[(i-1)*width+j-1].g;    matrix_g[1] = pixels[(i-1)*width+j].g;    matrix_g[2] = pixels[(i-1)*width+j+1].g;
-                matrix_g[3] = pixels[(i)*width+j-1].g;      matrix_g[4] = pixels[(i)*width+j].g;      matrix_g[5] = pixels[(i)*width+j+1].g;
-                matrix_g[6] = pixels[(i+1)*width+j-1].g;    matrix_g[7] = pixels[(i+1)*width+j].g;    matrix_g[8] = pixels[(i+1)*width+j+1].g;
+                insertion_sort(matrix, 9);
 
-                matrix_b[0] = pixels[(i-1)*width+j-1].b;    matrix_b[1] = pixels[(i-1)*width+j].b;    matrix_b[2] = pixels[(i-1)*width+j+1].b;
-                matrix_b[3] = pixels[(i)*width+j-1].b;      matrix_b[4] = pixels[(i)*width+j].b;      matrix_b[5] = pixels[(i)*width+j+1].b;
-                matrix_b[6] = pixels[(i+1)*width+j-1].b;    matrix_b[7] = pixels[(i+1)*width+j].b;    matrix_b[8] = pixels[(i+1)*width+j+1].b;
-
-                insertion_sort(matrix_r, 9);
-                insertion_sort(matrix_g, 9);
-                insertion_sort(matrix_b, 9);
-
-                new_pixels[i*width+j].r = matrix_r[4];
-                new_pixels[i*width+j].g = matrix_g[4];
-                new_pixels[i*width+j].b = matrix_b[4];
+                new_pixels[i*width+j] = matrix[4];
             }
             else {
-                new_pixels[i*width+j].r = pixels[i*width+j].r;
-                new_pixels[i*width+j].g = pixels[i*width+j].g;
-                new_pixels[i*width+j].b = pixels[i*width+j].b;
+                new_pixels[i*width+j] = pixels[i*width+j];
             }
             
         }
@@ -225,22 +212,17 @@ void array2D_free(int** arr, int rows) {
     free(arr);
 }
 
-int** histogram_values(Pixel* pixels, int width, int height) {
-    int** histogram = (int**)malloc(CHANNELS * sizeof(int*));
-    for (int i = 0; i < CHANNELS; i++) {
-        histogram[i] = (int*)malloc(256 * sizeof(int));
+void histogram_values(i8* image, int* histogram, int width, int height) {
+    for(int i = 0; i < 256; i++) {
+        histogram[i] = 0;
     }
 
 
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
-            histogram[0][pixels[i*width+j].r]++;
-            histogram[1][pixels[i*width+j].g]++;
-            histogram[2][pixels[i*width+j].b]++;
+            histogram[image[i*width+j]]++;
         }
     }
-
-    return histogram;
 }
 
 ts diff_ts(ts start, ts end) {
@@ -270,33 +252,38 @@ int main(int argc, char **argv)
     char image_path_gray[strlen(image_name)+11];
     char image_path_sobel[strlen(image_name)+7];
     char image_path_median[strlen(image_name)+8];
-    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+    printf("%s %s\n", image_path, image_name);
 
     // konwersja zdjęcia do tablicy intów
     i8* rgb_image = stbi_load(image_path, &width, &height, &bpp, CHANNELS);
+
+    // konwersja na structa Pixel reprezentującego wartości R,G,B w tablicy per pixel
     Pixel* pixels = convert_image_to_pixels(rgb_image, width, height);
     printf("%d %d %d\n\n", width, height, bpp);
 
     // konwersja do skali szarości
     Pixel* grayscale_pixels = convert_to_grayscale(pixels, width, height);
-    i8* grayscale = convert_pixels_to_image(grayscale_pixels, width, height);
-    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+    i8* grayscale = convert_pixels_to_gray_array(grayscale_pixels, width, height);
+    i8* grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
     
     // zapis zdjęcia w skali szarości do pliku
+    printf("%s %s\n", image_path, image_name);
     strcpy(image_path_gray, image_name);
     strcat(image_path_gray,"_grayscale.png");
-    save_image_png(image_path_gray, grayscale, width, height);
+    save_image_png(image_path_gray, grayscale_in_RGB, width, height);
     
     // filtr z wykorzystaniem operatora sobela
     clock_gettime(CLOCK_MONOTONIC_RAW, &sobel_t1);
-    Pixel* sobel_operator_pixels = sobel_operator(grayscale_pixels, width, height);
-    Pixel* sobel_pixels = sobel_normalize(sobel_operator_pixels, width, height);
+    i8* sobel_operator_result = sobel_operator(grayscale, width, height);
+    i8* sobel_normalize_result = sobel_normalize(sobel_operator_result, width, height);
     clock_gettime(CLOCK_MONOTONIC_RAW, &sobel_t2);
 
-    i8* sobel = convert_pixels_to_image(sobel_pixels, width, height);
-    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
+    
     
     // zapis zdjęcia po filtrze z operatorem sobela do pliku
+    i8* sobel = convert_gray_to_colors_array(sobel_normalize_result, width, height, CHANNELS);
+    printf("%s %s\n", image_path, image_name);
+
     strcpy(image_path_sobel, image_name);
     strcat(image_path_sobel,"_sobel.png");
     save_image_png(image_path_sobel, sobel, width, height);
@@ -304,23 +291,24 @@ int main(int argc, char **argv)
 
     // obliczenie histogramu
     clock_gettime(CLOCK_MONOTONIC_RAW, &histogram_t1);
-    int** histogram = histogram_values(pixels, width, height);
+    int histogram[256] = {0};
+    histogram_values(grayscale, histogram, width, height);
     clock_gettime(CLOCK_MONOTONIC_RAW, &histogram_t2);
 
     // wypisanie histogramu
     for(int i = 0; i < 256; i++) {
-        printf("%d. r: %d g: %d b: %d\n", i, histogram[0][i], histogram[1][i], histogram[2][i]);
+        printf("%d. Natężenie: %d\n", i, histogram[i]);
     }
 
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     clock_gettime(CLOCK_MONOTONIC_RAW, &median_t1);
-    Pixel* image_median_pixels = median(pixels, width, height);
+    i8* image_median_result = median(grayscale, width, height);
     clock_gettime(CLOCK_MONOTONIC_RAW, &median_t2);
     
-    i8* image_median = convert_pixels_to_image(image_median_pixels, width, height);
-    printf("%s %s %ld\n", image_path, image_name, strlen(image_name));
-    
     // zapis zdjęcia z zastosowanym filtrem medianowym
+    i8* image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
+    printf("%s %s\n", image_path, image_name);
+    
     strcpy(image_path_median, image_name);
     strcat(image_path_median,"_median.png");
     save_image_png(image_path_median, image_median, width, height);
@@ -329,15 +317,14 @@ int main(int argc, char **argv)
 
     // zwalnianie pamięci
     stbi_image_free(rgb_image);
-    stbi_image_free(sobel);
-    stbi_image_free(grayscale);
-    stbi_image_free(image_median);
+    free(sobel);
+    free(grayscale);
+    free(image_median);
     free(pixels);
     free(grayscale_pixels);
-    free(sobel_operator_pixels);
-    free(sobel_pixels);
-    free(image_median_pixels);
-    array2D_free(histogram, CHANNELS);
+    free(sobel_operator_result);
+    free(sobel_normalize_result);
+    free(image_median_result);
 
     return 0;
 }
