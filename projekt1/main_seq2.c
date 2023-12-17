@@ -103,9 +103,9 @@ int main(int argc, char **argv)
     clock_gettime(CLOCK_MONOTONIC_RAW, &histogram_t2);
 
     // wypisanie histogramu
-    // for(int i = 0; i < 256; i++) {
-    //     printf("%d. Natężenie: %d\n", i, histogram[i]);
-    // }
+    for(int i = 0; i < 256; i++) {
+        printf("%d. Natężenie: %d\n", i, histogram[i]);
+    }
 
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     clock_gettime(CLOCK_MONOTONIC_RAW, &median_t1);

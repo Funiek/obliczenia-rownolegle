@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "parallel/utils.h"
-#include "parallel/array_conversion.h"
-#include "parallel/image_processing.h"
+#include "seq/utils.h"
+#include "seq/array_conversion.h"
+#include "seq/image_processing.h"
 #include "mpi.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -20,16 +20,19 @@ int main(int argc, char **argv)
 {
     // parametry obrazka
     int width, height, bpp;
+    int local_start, local_end;
     i8* rgb_image;
     Pixel* pixels;
 
     // skala szarości
     Pixel* grayscale_pixels;
     i8* grayscale;
+    i8* local_grayscale;
     i8* grayscale_in_RGB;
 
     // histogram
     int histogram[256] = {0};
+    int local_histogram[256] = {0};
 
     // sobel
     i8* sobel_operator_result;
@@ -53,82 +56,96 @@ int main(int argc, char **argv)
     char image_path_median[strlen(image_name)+13];
 
     // czasy
-    ts sobel_t1, sobel_t2, median_t1, median_t2, histogram_t1, histogram_t2;
+    double sobel_t1, sobel_t2, median_t1, median_t2, histogram_t1, histogram_t2;
 
-    // dodanie prefixa z nazwą folderu
-    strcpy(image_path_gray, "img/");
-    strcpy(image_path_sobel, "img/");
-    strcpy(image_path_median, "img/");
+    // inicjalizacja MPI
+    int rank, size;
 
-    // dodanie suffixów z nazwami wykonanych czynności
-    strcat(image_path_gray, image_name);
-    strcat(image_path_gray,"_grayscale.png");
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    strcat(image_path_sobel, image_name);
-    strcat(image_path_sobel,"_sobel.png");
+    printf("Proces %d !!!\n", rank);
 
-    strcat(image_path_median, image_name);
-    strcat(image_path_median,"_median.png");
+    // główny proces wykonuje przerobienie zdjęcia na odpowiednie struktury, 
+    // konwersję do skali szarości oraz przygotowanie nazw plików docelowych
+    if(rank == 0) {
+        // dodanie prefixa z nazwą folderu
+        strcpy(image_path_gray, "img/");
+        strcpy(image_path_sobel, "img/");
+        strcpy(image_path_median, "img/");
 
-    // konwersja zdjęcia do tablicy intów
-    rgb_image = stbi_load(image_path, &width, &height, &bpp, CHANNELS);
+        // dodanie suffixów z nazwami wykonanych czynności
+        strcat(image_path_gray, image_name);
+        strcat(image_path_gray,"_grayscale.png");
 
-    // konwersja na structa Pixel reprezentującego wartości R,G,B w tablicy per pixel
-    pixels = convert_image_to_pixels(rgb_image, width, height, CHANNELS);
-    printf("%d %d %d\n\n", width, height, bpp);
+        strcat(image_path_sobel, image_name);
+        strcat(image_path_sobel,"_sobel.png");
 
-    // konwersja do skali szarości
-    grayscale_pixels = convert_to_grayscale(pixels, width, height);
-    grayscale = convert_pixels_to_gray_array(grayscale_pixels, width, height);
-    grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
+        strcat(image_path_median, image_name);
+        strcat(image_path_median,"_median.png");
+
+        // konwersja zdjęcia do tablicy intów
+        rgb_image = stbi_load(image_path, &width, &height, &bpp, CHANNELS);
+
+        // konwersja na structa Pixel reprezentującego wartości R,G,B w tablicy per pixel
+        pixels = convert_image_to_pixels(rgb_image, width, height, CHANNELS);
+        printf("%d %d %d\n\n", width, height, bpp);
+
+        // konwersja do skali szarości
+        grayscale_pixels = convert_to_grayscale(pixels, width, height);
+        grayscale = convert_pixels_to_gray_array(grayscale_pixels, width, height);
+        grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
+
+        // zapis zdjęcia w skali szarości do pliku
+        save_image_png(image_path_gray, grayscale_in_RGB, width, height);
+    }
+
+    // wszystkie procesy czekają aż załaduje się zdjęcie
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    // kopiowanie wysokości i szerokości obrazka do innych procesów
+    // MPI_Bcast(&width, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    // MPI_Bcast(&height, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+    local_start = rank * ((width * height) / size);
+    local_end = (rank == size - 1) ? (width * height) : (rank + 1) * ((width * height) / size);
+
+    // kopiowanie obrazka do innych procesów
+    // MPI_Bcast(local_grayscale, local_end - local_start, MPI_UINT8_T, 0, MPI_COMM_WORLD);
+
     
-    // zapis zdjęcia w skali szarości do pliku
-    save_image_png(image_path_gray, grayscale_in_RGB, width, height);
-    
-    // filtr z wykorzystaniem operatora sobela
-    clock_gettime(CLOCK_MONOTONIC_RAW, &sobel_t1);
-    sobel_operator_result = sobel_operator(grayscale, width, height);
-    sobel_normalize_result = sobel_normalize(sobel_operator_result, width, height);
-    clock_gettime(CLOCK_MONOTONIC_RAW, &sobel_t2);
 
     
     
-    // zapis zdjęcia po filtrze z operatorem sobela do pliku
-    sobel = convert_gray_to_colors_array(sobel_normalize_result, width, height, CHANNELS);
-    save_image_png(image_path_sobel, sobel, width, height);
-
-
     // obliczenie histogramu
-    clock_gettime(CLOCK_MONOTONIC_RAW, &histogram_t1);
-    histogram_values(grayscale, histogram, width, height);
-    clock_gettime(CLOCK_MONOTONIC_RAW, &histogram_t2);
-
-    // wypisanie histogramu
-    // for(int i = 0; i < 256; i++) {
-    //     printf("%d. Natężenie: %d\n", i, histogram[i]);
+    histogram_t1 = MPI_Wtime();
+    // for (int i = local_start; i < local_end; i++) {
+    //     local_histogram[grayscale[i]]++;
     // }
 
-    // zastosowanie filtru medianowego (nowa tablica wynikowa)
-    clock_gettime(CLOCK_MONOTONIC_RAW, &median_t1);
-    image_median_result = median(grayscale, width, height);
-    clock_gettime(CLOCK_MONOTONIC_RAW, &median_t2);
+    // MPI_Reduce(local_histogram, histogram, 256, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    histogram_t2 = MPI_Wtime();
+
+    // wypisanie histogramu
+    if (rank == 0) {
+        for(int i = 0; i < 256; i++) {
+            printf("%d. Natężenie: %d\n", i, histogram[i]);
+        }
+    }
     
-    // zapis zdjęcia z zastosowanym filtrem medianowym
-    image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
-    save_image_png(image_path_median, image_median, width, height);
 
-    printf("Czasy:\nHistogram: %ld\nSobel: %ld\nMedian: %ld\n", diff_ts(histogram_t1, histogram_t2).tv_nsec, diff_ts(sobel_t1, sobel_t2).tv_nsec, diff_ts(median_t1, median_t2).tv_nsec);
+    // główny proces zwalnia miejsce ze zmiennych
+    if(rank == 0) {
+        // zwalnianie pamięci
+        stbi_image_free(rgb_image);
+        free(grayscale);
+        free(pixels);
+        free(grayscale_pixels);
+        free(grayscale_in_RGB);
+    }
+    free(local_grayscale);
 
-    // zwalnianie pamięci
-    stbi_image_free(rgb_image);
-    free(sobel);
-    free(grayscale);
-    free(image_median);
-    free(pixels);
-    free(grayscale_pixels);
-    free(sobel_operator_result);
-    free(sobel_normalize_result);
-    free(image_median_result);
-
+    MPI_Finalize();
     return 0;
 }

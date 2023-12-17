@@ -1,8 +1,6 @@
 CC = gcc
-mpi : override CC=mpicc
 MPICC = mpicc
 LDFLAGS = -lm
-MPIFLAGS = -I/usr/include/x86_64-linux-gnu/mpich
 TARGET_SEQ = main_seq
 TARGET_MPI = main_mpi
 
@@ -15,8 +13,9 @@ OBJS_MPI = $(SRCS_MPI:.c=.o)
 seq: $(OBJS_SEQ)
 	$(CC) -o $(TARGET_SEQ) $(OBJS_SEQ) $(LDFLAGS)
 
+mpi : override CC=mpicc
 mpi: $(OBJS_MPI)
-	$(MPICC) -o $(TARGET_MPI) $(OBJS_MPI) $(LDFLAGS) $(MPIFLAGS)
+	$(MPICC) -o $(TARGET_MPI) $(OBJS_MPI) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) -c $< -o $@
