@@ -39,8 +39,8 @@ int main(int argc, char **argv)
     i8* sobel;
 
     // mediana
-    i8* image_median_result;
-    i8* local_image_median_result;
+    i8* image_median_result = NULL;
+    i8* local_image_median_result = NULL;
     i8* image_median;
     
     // nazwa zdjecia
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     }
 
     // wszystkie procesy czekają aż załaduje się zdjęcie
-    MPI_Barrier(MPI_COMM_WORLD);
+    // MPI_Barrier(MPI_COMM_WORLD);
 
     // kopiowanie wysokości i szerokości obrazka do innych procesów
     MPI_Bcast(&width, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -140,15 +140,13 @@ int main(int argc, char **argv)
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     median_t1 = MPI_Wtime();
     local_image_median_result = (i8*)malloc((local_end-local_start)*sizeof(i8));
-    median(local_image_median_result, grayscale, width, height, local_start, local_end);
-    
+    // median(local_image_median_result, grayscale, width, height, local_start, local_end);
+    printf("rank: %d dupa4\n", rank);
     MPI_Gather(local_image_median_result, (local_end - local_start), MPI_UINT8_T, image_median_result, (local_end - local_start), MPI_UINT8_T, 0, MPI_COMM_WORLD);
+    printf("rank: %d dupa5\n", rank);
     median_t2 = MPI_Wtime();
     
-    
-    
-    
-    // główny proces zwalnia miejsce ze zmiennych i zapisuje zdjęcia
+    // MPI_Barrier(MPI_COMM_WORLD);
     if(rank == 0) {
         // zapis zdjęcia w skali szarości do pliku
         grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
@@ -157,7 +155,14 @@ int main(int argc, char **argv)
         // zapis zdjęcia z zastosowanym filtrem medianowym
         image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
         save_image_png(image_path_median, image_median, width, height);
-
+    }
+    printf("rank: %d dupa6\n", rank);
+    
+    
+    // MPI_Barrier(MPI_COMM_WORLD);
+    free(local_image_median_result);
+    // główny proces zwalnia miejsce ze zmiennych i zapisuje zdjęcia
+    if(rank == 0) {
         // zwalnianie pamięci
         stbi_image_free(rgb_image);
         free(pixels);
@@ -165,9 +170,8 @@ int main(int argc, char **argv)
         free(grayscale_in_RGB);
         free(image_median_result);
     }
-    printf("dupa5\n");
-    free(local_image_median_result);
     free(grayscale);
+    printf("rank: %d dupa7\n", rank);
 
     MPI_Finalize();
     return 0;
