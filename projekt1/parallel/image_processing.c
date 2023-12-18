@@ -100,9 +100,9 @@ i8* sobel_normalize(i8* pixels, int width, int height) {
     return new_pixels;
 }
 
-i8* median(i8* pixels, int width, int height, int start, int end) {
+void median(i8* local_pixels, i8* pixels, int width, int height, int start, int end) {
     printf("dupa1 %d %d %d\n", start, end, end-start);
-    i8* new_pixels = (i8*)malloc((end-start)*sizeof(i8));
+
     i8 matrix[9];
     printf("dupa2\n");
     // TODO warunek brzegowy
@@ -110,6 +110,7 @@ i8* median(i8* pixels, int width, int height, int start, int end) {
         // 0 1 2
         // 3 4 5
         // 6 7 8
+        // printf("dupa i:%d\n%d %d %d\n%d %d %d\n%d %d %d\n==========================\n",i, i-1-width, i-width, i+1-width, i-1, i, i+1, i-1+width, i+width, i+1+width);
         if((i > width) && (i%width != 0) && (i%width != width-1) && ((width*height - width) > i)) {
             matrix[0] = pixels[i-1-width];
             matrix[1] = pixels[i-width];
@@ -123,16 +124,15 @@ i8* median(i8* pixels, int width, int height, int start, int end) {
 
             insertion_sort(matrix, 9);
 
-            new_pixels[i] = matrix[4];
+            local_pixels[i] = matrix[4];
         }
         else {
-            new_pixels[i] = pixels[i]; 
+            local_pixels[i] = pixels[i]; 
         }
         
     }
 
     printf("dupa3\n");
-    return new_pixels;
 }
 
 void histogram_values(i8* image, int* histogram, int start, int end) {

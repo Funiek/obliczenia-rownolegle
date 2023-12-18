@@ -27,7 +27,6 @@ int main(int argc, char **argv)
     // skala szarości
     Pixel* grayscale_pixels;
     i8* grayscale;
-    i8* local_grayscale;
     i8* grayscale_in_RGB;
 
     // histogram
@@ -134,17 +133,21 @@ int main(int argc, char **argv)
         }
     }
 
+    
     // czekamy aż procesy wszystkie będą gotowe na wykonanie operacji medianowej
     MPI_Barrier(MPI_COMM_WORLD);
 
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     median_t1 = MPI_Wtime();
-    local_image_median_result = median(grayscale, width, height, local_start, local_end);
-    // MPI_Gather(local_image_median_result, (local_end - local_start + 1), MPI_UINT8_T, image_median_result, (local_end - local_start + 1), MPI_UINT8_T, 0, MPI_COMM_WORLD);
+    local_image_median_result = (i8*)malloc((local_end-local_start)*sizeof(i8));
+    median(local_image_median_result, grayscale, width, height, local_start, local_end);
+    
+    MPI_Gather(local_image_median_result, (local_end - local_start), MPI_UINT8_T, image_median_result, (local_end - local_start), MPI_UINT8_T, 0, MPI_COMM_WORLD);
     median_t2 = MPI_Wtime();
     
     
-
+    
+    
     // główny proces zwalnia miejsce ze zmiennych i zapisuje zdjęcia
     if(rank == 0) {
         // zapis zdjęcia w skali szarości do pliku
@@ -152,8 +155,8 @@ int main(int argc, char **argv)
         save_image_png(image_path_gray, grayscale_in_RGB, width, height);
 
         // zapis zdjęcia z zastosowanym filtrem medianowym
-        // image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
-        // save_image_png(image_path_median, image_median, width, height);
+        image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
+        save_image_png(image_path_median, image_median, width, height);
 
         // zwalnianie pamięci
         stbi_image_free(rgb_image);
@@ -162,9 +165,9 @@ int main(int argc, char **argv)
         free(grayscale_in_RGB);
         free(image_median_result);
     }
+    printf("dupa5\n");
     free(local_image_median_result);
     free(grayscale);
-    // free(local_grayscale);
 
     MPI_Finalize();
     return 0;

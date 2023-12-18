@@ -7,3 +7,6 @@ stb/*
 img
 img/
 img/*
+*.o
+main_seq
+main_mpi
