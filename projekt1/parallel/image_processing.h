@@ -12,6 +12,7 @@ int multiply_and_add(i8* arr, int* kernel, int N);
 i8* sobel_operator(i8* pixels, int width, int height);
 i8* sobel_normalize(i8* pixels, int width, int height);
 void median(i8* local_pixels, i8* pixels, int width, int height, int start, int end, int rank);
+void median2(i8* local_pixels, i8* pixels, int interval);
 void histogram_values(i8* image, int* histogram, int start, int end);
 
 #endif // IMAGE_PROCESSING_H

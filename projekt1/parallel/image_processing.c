@@ -101,11 +101,8 @@ i8* sobel_normalize(i8* pixels, int width, int height) {
 }
 
 void median(i8* local_pixels, i8* pixels, int width, int height, int start, int end, int rank) {
-    printf("dupa1 %d %d %d\n", start, end, end-start);
-
     i8 matrix[9];
     int offeset = (end-start) * rank;
-    printf("dupa2 offeset: %d\n", offeset);
     // TODO warunek brzegowy
     for(int i = start; i < end; i++) {
         // 0 1 2
@@ -133,9 +130,16 @@ void median(i8* local_pixels, i8* pixels, int width, int height, int start, int 
         }
         
     }
-
-    printf("dupa3\n");
 }
+
+void median2(i8* local_pixels, i8* pixels, int interval) {
+    i8 matrix[9];
+
+    for(int i = 0; i < interval; i++) { 
+        local_pixels[i] = pixels[i]; 
+    }
+}
+
 
 void histogram_values(i8* image, int* histogram, int start, int end) {
     for (int i = start; i < end; i++) {

@@ -42,6 +42,12 @@ int main(int argc, char **argv)
     i8* image_median_result = NULL;
     i8* local_image_median_result = NULL;
     i8* image_median;
+
+    // mpi
+    int *recv_counts = NULL;
+    int *displacements = NULL;
+    int *rank_intervals = NULL;
+    int interval;
     
     // nazwa zdjecia
     char* image_path = argv[1];
@@ -64,9 +70,7 @@ int main(int argc, char **argv)
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
-
-    printf("Proces %d !!!\n", rank);
-
+    
     // główny proces wykonuje przerobienie zdjęcia na odpowiednie struktury, 
     // konwersję do skali szarości oraz przygotowanie nazw plików docelowych
     if(rank == 0) {
@@ -98,7 +102,9 @@ int main(int argc, char **argv)
 
         // inicjalizacja tabel dla głównego procesu
         image_median_result = (i8*)malloc(width * height * sizeof(i8));
+        
     }
+    rank_intervals = (int*)malloc(size * sizeof(int));
 
     // wszystkie procesy czekają aż załaduje się zdjęcie
     MPI_Barrier(MPI_COMM_WORLD);
@@ -109,20 +115,32 @@ int main(int argc, char **argv)
     
     local_start = rank * ((width * height) / size);
     local_end = (rank == size - 1) ? (width * height) : (rank + 1) * ((width * height) / size);
+    interval = local_end - local_start;
     printf("id: %d w: %d h: %d start: %d end: %d\n", rank, width, height, local_start, local_end);
+    MPI_Gather(&interval, 1, MPI_INT, rank_intervals, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(rank_intervals, size, MPI_INT, 0, MPI_COMM_WORLD);
 
-    // kopiowanie obrazka do innych procesów
-    if(rank != 0) {
-        grayscale = (i8*)malloc(width * height * sizeof(i8));
+    recv_counts = (int*)malloc(size * sizeof(int));
+    displacements = (int*)malloc(size * sizeof(int));
+
+    // inicjalizacja recv_counts i displacements
+    for (int i = 0; i < size; i++) {
+        recv_counts[i] = rank_intervals[i];  // każdy proces wysyła określoną liczbę danych
+        displacements[i] = (i==0) ? 0 : displacements[i - 1] + rank_intervals[i - 1];  // przesunięcie w buforze dla każdego procesu
+
+        // printf("i:%d recv_counts:%d displacements:%d\n", i, recv_counts[i], displacements[i]);
     }
-    MPI_Bcast(grayscale, width * height, MPI_UINT8_T, 0, MPI_COMM_WORLD);
+    
+    MPI_Barrier(MPI_COMM_WORLD);
+    interval = recv_counts[rank];
+    i8* local_grayscale = (i8*)malloc(interval*sizeof(i8));
+    MPI_Scatterv(grayscale, recv_counts, displacements, MPI_UINT8_T, local_grayscale, interval, MPI_UINT8_T, 0, MPI_COMM_WORLD);
 
     // obliczenie histogramu
     histogram_t1 = MPI_Wtime();
-    for (int i = local_start; i < local_end; i++) {
-        local_histogram[grayscale[i]]++;
+    for (int i = 0; i < local_end - local_start; i++) {
+        local_histogram[local_grayscale[i]]++;
     }
-
     MPI_Reduce(local_histogram, histogram, 256, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     histogram_t2 = MPI_Wtime();
 
@@ -133,27 +151,24 @@ int main(int argc, char **argv)
         }
     }
 
-    
     // czekamy aż procesy wszystkie będą gotowe na wykonanie operacji medianowej
     MPI_Barrier(MPI_COMM_WORLD);
 
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     median_t1 = MPI_Wtime();
     local_image_median_result = (i8*)malloc((local_end-local_start)*sizeof(i8));
-    median(local_image_median_result, grayscale, width, height, local_start, local_end, rank);
-
-    printf("rank: %d dupa4\n", rank);
-    MPI_Gather(local_image_median_result, (local_end - local_start), MPI_UINT8_T, image_median_result, (local_end - local_start), MPI_UINT8_T, 0, MPI_COMM_WORLD);
-    printf("rank: %d dupa5\n", rank);
+    median2(local_image_median_result, local_grayscale, interval);
+    MPI_Gatherv(local_image_median_result, interval, MPI_UINT8_T, image_median_result, recv_counts, displacements, MPI_UINT8_T, 0, MPI_COMM_WORLD);
     median_t2 = MPI_Wtime();
-    
-    MPI_Barrier(MPI_COMM_WORLD);
-    if(rank == 0) {
-        // for(int i = 0; i < width*height; i++) {
-        //     printf("%hhu ", image_median_result[i]);
-        // }
-        // printf("\n");
 
+    // printf("Proces %d otrzymał dane:\n", rank);
+    // for (int i = 0; i < interval; i++) {
+    //     printf("rank:%d data:%d\n", rank, local_grayscale[i]);
+    // }
+    // printf("\n");
+
+    // MPI_Barrier(MPI_COMM_WORLD);
+    if(rank == 0) {
         // zapis zdjęcia w skali szarości do pliku
         grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
         save_image_png(image_path_gray, grayscale_in_RGB, width, height);
@@ -162,11 +177,7 @@ int main(int argc, char **argv)
         image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
         save_image_png(image_path_median, image_median, width, height);
     }
-    printf("rank: %d dupa6\n", rank);
     
-    
-    // MPI_Barrier(MPI_COMM_WORLD);
-    free(local_image_median_result);
     // główny proces zwalnia miejsce ze zmiennych i zapisuje zdjęcia
     if(rank == 0) {
         // zwalnianie pamięci
@@ -174,10 +185,16 @@ int main(int argc, char **argv)
         free(pixels);
         free(grayscale_pixels);
         free(grayscale_in_RGB);
+        free(image_median);
         free(image_median_result);
+        free(grayscale);
     }
-    free(grayscale);
-    printf("rank: %d dupa7\n", rank);
+    free(local_grayscale);
+    free(recv_counts);
+    free(displacements);
+    free(rank_intervals);
+    free(local_image_median_result);
+    
 
     MPI_Finalize();
     return 0;
