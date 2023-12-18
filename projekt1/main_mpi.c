@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     }
 
     // wszystkie procesy czekają aż załaduje się zdjęcie
-    // MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
 
     // kopiowanie wysokości i szerokości obrazka do innych procesów
     MPI_Bcast(&width, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -140,14 +140,20 @@ int main(int argc, char **argv)
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     median_t1 = MPI_Wtime();
     local_image_median_result = (i8*)malloc((local_end-local_start)*sizeof(i8));
-    // median(local_image_median_result, grayscale, width, height, local_start, local_end);
+    median(local_image_median_result, grayscale, width, height, local_start, local_end, rank);
+
     printf("rank: %d dupa4\n", rank);
     MPI_Gather(local_image_median_result, (local_end - local_start), MPI_UINT8_T, image_median_result, (local_end - local_start), MPI_UINT8_T, 0, MPI_COMM_WORLD);
     printf("rank: %d dupa5\n", rank);
     median_t2 = MPI_Wtime();
     
-    // MPI_Barrier(MPI_COMM_WORLD);
+    MPI_Barrier(MPI_COMM_WORLD);
     if(rank == 0) {
+        // for(int i = 0; i < width*height; i++) {
+        //     printf("%hhu ", image_median_result[i]);
+        // }
+        // printf("\n");
+
         // zapis zdjęcia w skali szarości do pliku
         grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
         save_image_png(image_path_gray, grayscale_in_RGB, width, height);
