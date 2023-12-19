@@ -24,6 +24,7 @@
         "utils.h": "c",
         "stdlib.h": "c",
         "array_conversion.h": "c",
-        "image_processing.h": "c"
+        "image_processing.h": "c",
+        "chrono": "c"
     }
 }

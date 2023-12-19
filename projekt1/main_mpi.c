@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     char image_path_median[strlen(image_name)+13];
 
     // czasy
-    double sobel_t1, sobel_t2, median_t1, median_t2, histogram_t1, histogram_t2;
+    double sobel_t1, sobel_t2, median_t1, median_t2, histogram_t1, histogram_t2, sobel_diff, median_diff, histogram_diff, sobel_global, median_global, histogram_global;
 
     // inicjalizacja MPI
     int rank, size;
@@ -178,9 +178,20 @@ int main(int argc, char **argv)
     // }
     // printf("\n");
 
-    
+    // liczenie i sumowanie czasow
+    sobel_diff = sobel_t2 - sobel_t1;
+    median_diff = median_t2 - median_t1;
+    histogram_diff = histogram_t2 - histogram_t1;
+
+    // przegadaj z Maćkiem czy to ma sens czy lepiej suma / size
+    MPI_Reduce(&sobel_diff, &sobel_global, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&median_diff, &median_global, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&histogram_diff, &histogram_global, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
 
     if(rank == 0) {
+        // wypisanie czasow
+        printf("Czasy:\nHistogram: %f\nMedian: %f\nSobel: %f\n", histogram_global, median_global, sobel_global);
+
         // zapis zdjęcia w skali szarości do pliku
         grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
         save_image_png(image_path_gray, grayscale_in_RGB, width, height);
@@ -193,7 +204,7 @@ int main(int argc, char **argv)
         sobel = convert_gray_to_colors_array(sobel_operator_result, width, height, CHANNELS);
         save_image_png(image_path_sobel, sobel, width, height);
     }
-    printf("doszlo %d\n", rank);
+    
     // główny proces zwalnia miejsce ze zmiennych i zapisuje zdjęcia
     if(rank == 0) {
         // zwalnianie pamięci
@@ -206,6 +217,7 @@ int main(int argc, char **argv)
         free(sobel_operator_result);
         free(sobel);
     }
+    // zwalnianie pamięci
     free(grayscale);
     free(recv_counts);
     free(displacements);
