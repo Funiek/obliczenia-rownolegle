@@ -114,11 +114,6 @@ void median(i8* local_pixels, i8* pixels, int width, int height, int start, int 
         bottom_touched = (i+width >= width*height) ? true : false;
         left_touched = ((i-1)%width == width-1) ? true : false;
         right_touched = ((i+1)%width == 0) ? true : false;
-
-        if (top_touched || bottom_touched || right_touched || left_touched) {
-            printf("dotkniete!\n");
-        }
-
         
         // printf("dupa i:%d\n%d %d %d\n%d %d %d\n%d %d %d\n==========================\n",i, i-1-width, i-width, i+1-width, i-1, i, i+1, i-1+width, i+width, i+1+width);
         matrix[0] = (!left_touched && !top_touched) ? pixels[i-1-width] : pixels[i];
