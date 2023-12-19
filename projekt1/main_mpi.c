@@ -21,27 +21,28 @@ int main(int argc, char **argv)
     // parametry obrazka
     int width, height, bpp;
     int local_start, local_end;
-    i8* rgb_image;
-    Pixel* pixels;
+    i8* rgb_image = NULL;
+    Pixel* pixels = NULL;
 
     // skala szarości
-    Pixel* grayscale_pixels;
-    i8* grayscale;
-    i8* grayscale_in_RGB;
+    Pixel* grayscale_pixels = NULL;
+    i8* grayscale = NULL;
+    i8* grayscale_in_RGB = NULL;
 
     // histogram
     int histogram[256] = {0};
     int local_histogram[256] = {0};
 
     // sobel
-    i8* sobel_operator_result;
-    i8* sobel_normalize_result;
-    i8* sobel;
+    i8* sobel_operator_result = NULL;
+    i8* local_sobel_operator_result = NULL;
+    i8* local_sobel_normalize_result = NULL;
+    i8* sobel = NULL;
 
     // mediana
     i8* image_median_result = NULL;
     i8* local_image_median_result = NULL;
-    i8* image_median;
+    i8* image_median = NULL;
 
     // mpi
     int *recv_counts = NULL;
@@ -102,7 +103,7 @@ int main(int argc, char **argv)
 
         // inicjalizacja tabel dla głównego procesu
         image_median_result = (i8*)malloc(width * height * sizeof(i8));
-        
+        sobel_operator_result = (i8*)malloc(width * height * sizeof(i8));
     }
     rank_intervals = (int*)malloc(size * sizeof(int));
 
@@ -160,10 +161,16 @@ int main(int argc, char **argv)
 
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     median_t1 = MPI_Wtime();
-    local_image_median_result = (i8*)malloc((local_end-local_start)*sizeof(i8));
-    median(local_image_median_result, grayscale, width, height, local_start, local_end, rank);
+    local_image_median_result = median(grayscale, width, height, local_start, local_end, rank);
     MPI_Gatherv(local_image_median_result, interval, MPI_UINT8_T, image_median_result, recv_counts, displacements, MPI_UINT8_T, 0, MPI_COMM_WORLD);
     median_t2 = MPI_Wtime();
+
+    // zastosowanie filtru medianowego (nowa tablica wynikowa)
+    sobel_t1 = MPI_Wtime();
+    local_sobel_operator_result = sobel_operator(grayscale, width, height, local_start, local_end, rank);
+    local_sobel_normalize_result = sobel_normalize(local_sobel_operator_result, local_start, local_end, rank);
+    MPI_Gatherv(local_sobel_normalize_result, interval, MPI_UINT8_T, sobel_operator_result, recv_counts, displacements, MPI_UINT8_T, 0, MPI_COMM_WORLD);
+    sobel_t2 = MPI_Wtime();
 
     // printf("Proces %d otrzymał dane:\n", rank);
     // for (int i = 0; i < interval; i++) {
@@ -171,7 +178,8 @@ int main(int argc, char **argv)
     // }
     // printf("\n");
 
-    // MPI_Barrier(MPI_COMM_WORLD);
+    
+
     if(rank == 0) {
         // zapis zdjęcia w skali szarości do pliku
         grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
@@ -180,8 +188,12 @@ int main(int argc, char **argv)
         // zapis zdjęcia z zastosowanym filtrem medianowym
         image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
         save_image_png(image_path_median, image_median, width, height);
+
+        // zapis zdjęcia po filtrze z operatorem sobela do pliku
+        sobel = convert_gray_to_colors_array(sobel_operator_result, width, height, CHANNELS);
+        save_image_png(image_path_sobel, sobel, width, height);
     }
-    
+    printf("doszlo %d\n", rank);
     // główny proces zwalnia miejsce ze zmiennych i zapisuje zdjęcia
     if(rank == 0) {
         // zwalnianie pamięci
@@ -191,13 +203,16 @@ int main(int argc, char **argv)
         free(grayscale_in_RGB);
         free(image_median);
         free(image_median_result);
+        free(sobel_operator_result);
+        free(sobel);
     }
     free(grayscale);
     free(recv_counts);
     free(displacements);
     free(rank_intervals);
     free(local_image_median_result);
-    
+    free(local_sobel_operator_result);
+    free(local_sobel_normalize_result);
 
     MPI_Finalize();
     return 0;
