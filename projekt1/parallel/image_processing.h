@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "utils.h"
 #include <math.h>
+#include <stdbool.h>
 
 void print_image(Pixel* pixels, int width, int height);
 Pixel* convert_to_grayscale(Pixel* pixels, int width, int height);

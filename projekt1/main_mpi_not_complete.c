@@ -130,20 +130,16 @@ int main(int argc, char **argv)
 
         // printf("i:%d recv_counts:%d displacements:%d\n", i, recv_counts[i], displacements[i]);
     }
-    interval = recv_counts[rank];
-
-    // kopiowanie obrazka do innych procesów
-    if(rank != 0) {
-        grayscale = (i8*)malloc(width * height * sizeof(i8));
-    }
-    MPI_Bcast(grayscale, width * height, MPI_UINT8_T, 0, MPI_COMM_WORLD);
     
     MPI_Barrier(MPI_COMM_WORLD);
+    interval = recv_counts[rank];
+    i8* local_grayscale = (i8*)malloc(interval*sizeof(i8));
+    MPI_Scatterv(grayscale, recv_counts, displacements, MPI_UINT8_T, local_grayscale, interval, MPI_UINT8_T, 0, MPI_COMM_WORLD);
 
     // obliczenie histogramu
     histogram_t1 = MPI_Wtime();
-    for (int i = local_start; i < local_end; i++) {
-        local_histogram[grayscale[i]]++;
+    for (int i = 0; i < local_end - local_start; i++) {
+        local_histogram[local_grayscale[i]]++;
     }
     MPI_Reduce(local_histogram, histogram, 256, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     histogram_t2 = MPI_Wtime();
@@ -161,13 +157,13 @@ int main(int argc, char **argv)
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     median_t1 = MPI_Wtime();
     local_image_median_result = (i8*)malloc((local_end-local_start)*sizeof(i8));
-    median(local_image_median_result, grayscale, width, height, local_start, local_end, rank);
+    median2(local_image_median_result, local_grayscale, interval);
     MPI_Gatherv(local_image_median_result, interval, MPI_UINT8_T, image_median_result, recv_counts, displacements, MPI_UINT8_T, 0, MPI_COMM_WORLD);
     median_t2 = MPI_Wtime();
 
     // printf("Proces %d otrzymał dane:\n", rank);
     // for (int i = 0; i < interval; i++) {
-    //     printf("rank:%d data:%d\n", rank, grayscale[i]);
+    //     printf("rank:%d data:%d\n", rank, local_grayscale[i]);
     // }
     // printf("\n");
 
@@ -191,8 +187,9 @@ int main(int argc, char **argv)
         free(grayscale_in_RGB);
         free(image_median);
         free(image_median_result);
+        free(grayscale);
     }
-    free(grayscale);
+    free(local_grayscale);
     free(recv_counts);
     free(displacements);
     free(rank_intervals);

@@ -102,32 +102,70 @@ i8* sobel_normalize(i8* pixels, int width, int height) {
 
 void median(i8* local_pixels, i8* pixels, int width, int height, int start, int end, int rank) {
     i8 matrix[9];
-    int offeset = (end-start) * rank;
+    bool top_touched, bottom_touched, left_touched, right_touched;
+
+    // printf("rank:%d start:%d end:%d offset:%d width:%d height:%d\n", rank, start, end, offeset, width, height);
     // TODO warunek brzegowy
     for(int i = start; i < end; i++) {
         // 0 1 2
         // 3 4 5
         // 6 7 8
+        top_touched = (i-width < 0) ? true : false;
+        bottom_touched = (i+width >= width*height) ? true : false;
+        left_touched = ((i-1)%width == width-1) ? true : false;
+        right_touched = ((i+1)%width == 0) ? true : false;
+
+        if (top_touched || bottom_touched || right_touched || left_touched) {
+            printf("dotkniete!\n");
+        }
+
         
-        if((i > width) && (i%width != 0) && (i%width != width-1) && ((width*height - width) > i)) {
-            // printf("dupa i:%d\n%d %d %d\n%d %d %d\n%d %d %d\n==========================\n",i, i-1-width, i-width, i+1-width, i-1, i, i+1, i-1+width, i+width, i+1+width);
-            matrix[0] = pixels[i-1-width];
-            matrix[1] = pixels[i-width];
-            matrix[2] = pixels[i+1-width];
-            matrix[3] = pixels[i-1];      
-            matrix[4] = pixels[i];      
-            matrix[5] = pixels[i+1];
-            matrix[6] = pixels[i-1+width];
-            matrix[7] = pixels[i+width];
-            matrix[8] = pixels[i+1+width];
+        // printf("dupa i:%d\n%d %d %d\n%d %d %d\n%d %d %d\n==========================\n",i, i-1-width, i-width, i+1-width, i-1, i, i+1, i-1+width, i+width, i+1+width);
+        matrix[0] = (!left_touched && !top_touched) ? pixels[i-1-width] : pixels[i];
+        matrix[1] = (!top_touched) ? pixels[i-width] : pixels[i];
+        matrix[2] = (!top_touched && !right_touched) ? pixels[i+1-width] : pixels[i];
+        matrix[3] = (!left_touched) ? pixels[i-1] : pixels[i];
+        matrix[4] = pixels[i];
+        matrix[5] = (!right_touched) ? pixels[i+1] : pixels[i];
+        matrix[6] = (!left_touched && !bottom_touched) ? pixels[i-1+width] : pixels[i];
+        matrix[7] = (!bottom_touched) ?  pixels[i+width] : pixels[i];
+        matrix[8] = (!bottom_touched && !right_touched) ? pixels[i+1+width] : pixels[i];
 
-            insertion_sort(matrix, 9);
+        insertion_sort(matrix, 9);
 
-            local_pixels[i - offeset] = matrix[4];
-        }
-        else {
-            local_pixels[i - offeset] = pixels[i]; 
-        }
+        local_pixels[i - start] = matrix[4];
+        
+
+        // matrix[0] = pixels[i-1-width];
+        // matrix[1] = pixels[i-width];
+        // matrix[2] = pixels[i+1-width];
+        // matrix[3] = pixels[i-1];      
+        // matrix[4] = pixels[i];      
+        // matrix[5] = pixels[i+1];
+        // matrix[6] = pixels[i-1+width];
+        // matrix[7] = pixels[i+width];
+        // matrix[8] = pixels[i+1+width];
+
+
+        // if((i > width) && (i%width != 0) && (i%width != width-1) && ((width*height - width) > i)) {
+        //     // printf("dupa i:%d\n%d %d %d\n%d %d %d\n%d %d %d\n==========================\n",i, i-1-width, i-width, i+1-width, i-1, i, i+1, i-1+width, i+width, i+1+width);
+        //     matrix[0] = pixels[i-1-width];
+        //     matrix[1] = pixels[i-width];
+        //     matrix[2] = pixels[i+1-width];
+        //     matrix[3] = pixels[i-1];      
+        //     matrix[4] = pixels[i];      
+        //     matrix[5] = pixels[i+1];
+        //     matrix[6] = pixels[i-1+width];
+        //     matrix[7] = pixels[i+width];
+        //     matrix[8] = pixels[i+1+width];
+
+        //     insertion_sort(matrix, 9);
+
+        //     local_pixels[i - offeset] = matrix[4];
+        // }
+        // else {
+        //     local_pixels[i - offeset] = pixels[i]; 
+        // }
         
     }
 }
