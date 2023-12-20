@@ -138,8 +138,6 @@ int main(int argc, char **argv)
         grayscale = (i8*)malloc(width * height * sizeof(i8));
     }
     MPI_Bcast(grayscale, width * height, MPI_UINT8_T, 0, MPI_COMM_WORLD);
-    
-    MPI_Barrier(MPI_COMM_WORLD);
 
     // obliczenie histogramu
     histogram_t1 = MPI_Wtime();
@@ -174,7 +172,7 @@ int main(int argc, char **argv)
 
     // printf("Proces %d otrzymał dane:\n", rank);
     // for (int i = 0; i < interval; i++) {
-    //     printf("rank:%d data:%d\n", rank, grayscale[i]);
+        // printf("rank:%d data:%d\n", rank, grayscale[i]);
     // }
     // printf("\n");
 

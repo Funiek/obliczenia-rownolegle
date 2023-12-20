@@ -2,4 +2,4 @@
 #SBATCH -N 2
 #SBATCH -n 2
 #SBATCH -c 6
-mpiexec ./main_parallel
+mpiexec ./main_mpi ./engine.png

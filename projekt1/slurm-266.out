@@ -1,0 +1,7 @@
+slurmstepd: error: couldn't chdir to `/srv/grid/or/kf/obliczenia-rownolegle/projekt1': No such file or directory: going to /tmp instead
+slurmstepd: error: couldn't chdir to `/srv/grid/or/kf/obliczenia-rownolegle/projekt1': No such file or directory: going to /tmp instead
+[proxy:0:1@n15] launch_procs (pm/pmiserv/pmip_cb.c:621): unable to change wdir to /srv/grid/or/kf/obliczenia-rownolegle/projekt1 (No such file or directory)
+[mpiexec@n14] control_cb (pm/pmiserv/pmiserv_cb.c:206): assert (!closed) failed
+[mpiexec@n14] HYDT_dmxu_poll_wait_for_event (tools/demux/demux_poll.c:76): callback returned error status
+[mpiexec@n14] HYD_pmci_wait_for_completion (pm/pmiserv/pmiserv_pmci.c:160): error waiting for event
+[mpiexec@n14] main (ui/mpich/mpiexec.c:325): process manager error waiting for completion
