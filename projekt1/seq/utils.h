@@ -4,7 +4,8 @@
 #include <stdint.h>
 #include <time.h>
 #include <stdlib.h>
-
+#include <stdbool.h>
+#include <sys/time.h>
 #define u8 uint8_t
 
 typedef struct timespec ts;

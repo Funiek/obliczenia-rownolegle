@@ -36,7 +36,7 @@ int multiply_and_add(u8* arr, int* kernel, int N) {
     return sum;
 }
 
-u8* sobel_operator(u8* pixels, int width, int height, int start, int end, int rank) {
+u8* sobel_operator(const u8* pixels, int width, int height, int start, int end, int rank) {
     u8* new_pixels = (u8*)malloc((end-start)*sizeof(u8));
     
     u8 sobel_prep[9];
@@ -79,7 +79,7 @@ u8* sobel_operator(u8* pixels, int width, int height, int start, int end, int ra
     return new_pixels;
 }
 
-u8* sobel_normalize(u8* pixels, int start, int end, int rank) {
+u8* sobel_normalize(const u8* pixels, int start, int end, int rank) {
     u8* new_pixels = (u8*)malloc((end-start)*sizeof(u8));
     u8 max = pixels[0];
     u8 min = pixels[0];
@@ -100,7 +100,7 @@ u8* sobel_normalize(u8* pixels, int start, int end, int rank) {
     return new_pixels;
 }
 
-u8* median(u8* pixels, int width, int height, int start, int end, int rank) {
+u8* median(const u8* pixels, int width, int height, int start, int end, int rank) {
     u8* local_pixels = (u8*)malloc((end-start)*sizeof(u8));
 
     u8 matrix[9];
@@ -133,14 +133,6 @@ u8* median(u8* pixels, int width, int height, int start, int end, int rank) {
     }
 
     return local_pixels;
-}
-
-void median2(u8* local_pixels, u8* pixels, int interval) {
-    u8 matrix[9];
-
-    for(int i = 0; i < interval; i++) { 
-        local_pixels[i] = pixels[i]; 
-    }
 }
 
 

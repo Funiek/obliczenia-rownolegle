@@ -26,6 +26,7 @@
         "array_conversion.h": "c",
         "image_processing.h": "c",
         "chrono": "c",
-        "locale": "c"
+        "locale": "c",
+        "stb_image.h": "c"
     }
 }

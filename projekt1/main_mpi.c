@@ -180,14 +180,16 @@ int main(int argc, char **argv)
     histogram_diff = histogram_t2 - histogram_t1;
 
     // przegadaj z Maćkiem czy to ma sens czy lepiej suma / size
-    // MPI_Reduce(&sobel_diff, &sobel_global, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&sobel_diff, &sobel_global, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&sobel_diff, &sobel_global, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&median_diff, &median_global, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&histogram_diff, &histogram_global, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    /*MPI_Reduce(&sobel_diff, &sobel_global, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
     MPI_Reduce(&median_diff, &median_global, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&histogram_diff, &histogram_global, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&histogram_diff, &histogram_global, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);*/
 
     if(rank == 0) {
         // wypisanie czasow
-        printf("Czasy:\nHistogram: %f\nMedian: %f\nSobel: %f\n", (double) histogram_global / size, (double) median_global / size, (double) sobel_global / size);
+        printf("Czasy:\nHistogram: %f\nMedian: %f\nSobel: %f\n", (double) histogram_global, (double) median_global , (double) sobel_global);
 
         // zapis zdjęcia w skali szarości do pliku
         grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);

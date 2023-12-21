@@ -11,7 +11,7 @@
 
 #define CHANNELS 3
 
-int save_image_png(char const* file_name, i8* rgb_image, int width, int height) {
+int save_image_png(char const* file_name, u8* rgb_image, int width, int height) {
     return stbi_write_png(file_name, width, height, CHANNELS, rgb_image, width * CHANNELS);
 }
 
@@ -19,25 +19,25 @@ int main(int argc, char **argv)
 {
     // parametry obrazka
     int width, height, bpp;
-    i8* rgb_image = NULL;
+    u8* rgb_image = NULL;
     Pixel* pixels = NULL;
 
     // skala szarości
     Pixel* grayscale_pixels = NULL;
-    i8* grayscale = NULL;
-    i8* grayscale_in_RGB = NULL;
+    u8* grayscale = NULL;
+    u8* grayscale_in_RGB = NULL;
 
     // histogram
     int histogram[256] = {0};
 
     // sobel
-    i8* sobel_operator_result = NULL;
-    i8* sobel_normalize_result = NULL;
-    i8* sobel = NULL;
+    u8* sobel_operator_result = NULL;
+    u8* sobel_normalize_result = NULL;
+    u8* sobel = NULL;
 
     // mediana
-    i8* image_median_result = NULL;
-    i8* image_median = NULL;
+    u8* image_median_result = NULL;
+    u8* image_median = NULL;
     
     // nazwa zdjecia
     char* image_path = argv[1];
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     clock_gettime(CLOCK_MONOTONIC_RAW, &sobel_t2);
     
     
-    printf("Czasy:\nHistogram: %ld\nSobel: %ld\nMedian: %ld\n", diff_ts(histogram_t1, histogram_t2).tv_nsec, diff_ts(sobel_t1, sobel_t2).tv_nsec, diff_ts(median_t1, median_t2).tv_nsec);
+    printf("Czasy:\nHistogram: %ld\nMedian: %ld\nSobel: %ld\n", diff_ts(histogram_t1, histogram_t2).tv_nsec, diff_ts(median_t1, median_t2).tv_nsec, diff_ts(sobel_t1, sobel_t2).tv_nsec);
 
     // zapis zdjęcia w skali szarości do pliku
     grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
