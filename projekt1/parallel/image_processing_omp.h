@@ -1,9 +1,9 @@
-#ifndef IMAGE_PROCESSING_H
-#define IMAGE_PROCESSING_H
+#ifndef IMAGE_PROCESSING_OMP_H
+#define IMAGE_PROCESSING_OMP_H
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "utils.h"
+#include "utils_omp.h"
 #include <math.h>
 #include <stdbool.h>
 #include <string.h> 
@@ -17,4 +17,4 @@ u8* median(u8* pixels, int width, int height, int start, int end, int rank);
 void median2(u8* local_pixels, u8* pixels, int interval);
 void histogram_values(const u8* image, u32* histogram, int start, int end);
 
-#endif // IMAGE_PROCESSING_H
+#endif // IMAGE_PROCESSING_OMP_H

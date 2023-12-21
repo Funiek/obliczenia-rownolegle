@@ -25,6 +25,7 @@
         "stdlib.h": "c",
         "array_conversion.h": "c",
         "image_processing.h": "c",
-        "chrono": "c"
+        "chrono": "c",
+        "locale": "c"
     }
 }

@@ -1,4 +1,4 @@
-#include "image_processing.h"
+#include "image_processing_omp.h"
 
 void print_image(Pixel* pixels, int width, int height) {
     for(int i = 0; i < height; i++) {
@@ -145,7 +145,22 @@ void median2(u8* local_pixels, u8* pixels, int interval) {
 
 
 void histogram_values(const u8* image, u32* histogram, int start, int end) {
-    for (int i = start; i < end; i++) {
-        histogram[image[i]]++;
+    int n_threads=omp_get_max_threads();
+    u32 local_histograms[n_threads][256];
+    memset(histogram, 0, sizeof(u32) * 256);
+
+    #pragma omp parallel default(none) shared(image,local_histograms) firstprivate(start,end)
+    {
+        u32 *local_histogram=local_histograms[omp_get_thread_num()];
+        memset(local_histogram, 0, sizeof(u32) * 256);
+        #pragma omp for
+        for(int i = start; i < end; i++) {
+            local_histogram[image[i]]++;
+        }
+    }
+    for(int i = 0; i < n_threads; i++) {
+        for(int j = 0; j < 256; j++) {
+            histogram[j] += local_histograms[i][j];
+        }
     }
 }

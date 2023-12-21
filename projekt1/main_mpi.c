@@ -30,8 +30,8 @@ int main(int argc, char **argv)
     u8* grayscale_in_RGB = NULL;
 
     // histogram
-    int histogram[256] = {0};
-    int local_histogram[256] = {0};
+    u32 histogram[256] = {0};
+    u32 local_histogram[256] = {0};
 
     // sobel
     u8* sobel_operator_result = NULL;
@@ -142,13 +142,13 @@ int main(int argc, char **argv)
     // obliczenie histogramu
     histogram_t1 = MPI_Wtime();
     histogram_values(grayscale, local_histogram, local_start, local_end);
-    MPI_Reduce(local_histogram, histogram, 256, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(local_histogram, histogram, 256, MPI_UINT32_T, MPI_SUM, 0, MPI_COMM_WORLD);
     histogram_t2 = MPI_Wtime();
 
     // wypisanie histogramu
     if (rank == 0) {
         for(int i = 0; i < 256; i++) {
-            printf("%d. Natężenie: %d\n", i, histogram[i]);
+            printf("%d. Natężenie: %u\n", i, histogram[i]);
         }
     }
 
