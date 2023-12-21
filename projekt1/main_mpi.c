@@ -141,9 +141,7 @@ int main(int argc, char **argv)
 
     // obliczenie histogramu
     histogram_t1 = MPI_Wtime();
-    for (int i = local_start; i < local_end; i++) {
-        local_histogram[grayscale[i]]++;
-    }
+    histogram_values(grayscale, local_histogram, local_start, local_end);
     MPI_Reduce(local_histogram, histogram, 256, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
     histogram_t2 = MPI_Wtime();
 
