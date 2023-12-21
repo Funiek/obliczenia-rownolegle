@@ -5,7 +5,7 @@ TARGET_SEQ = main_seq
 TARGET_MPI = main_mpi
 
 SRCS_SEQ = main_seq2.c seq/utils.c seq/array_conversion.c seq/image_processing.c
-SRCS_MPI = main_mpi.c parallel/utils.c parallel/array_conversion.c parallel/image_processing.c
+SRCS_MPI = main_mpi_omp.c parallel/utils.c parallel/array_conversion.c parallel/image_processing.c
 
 OBJS_SEQ = $(SRCS_SEQ:.c=.o)
 OBJS_MPI = $(SRCS_MPI:.c=.o)

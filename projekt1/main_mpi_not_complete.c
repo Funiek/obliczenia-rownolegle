@@ -12,7 +12,7 @@
 
 #define CHANNELS 3
 
-int save_image_png(char const* file_name, i8* rgb_image, int width, int height) {
+int save_image_png(char const* file_name, u8* rgb_image, int width, int height) {
     return stbi_write_png(file_name, width, height, CHANNELS, rgb_image, width * CHANNELS);
 }
 
@@ -21,27 +21,27 @@ int main(int argc, char **argv)
     // parametry obrazka
     int width, height, bpp;
     int local_start, local_end;
-    i8* rgb_image;
+    u8* rgb_image;
     Pixel* pixels;
 
     // skala szarości
     Pixel* grayscale_pixels;
-    i8* grayscale;
-    i8* grayscale_in_RGB;
+    u8* grayscale;
+    u8* grayscale_in_RGB;
 
     // histogram
     int histogram[256] = {0};
     int local_histogram[256] = {0};
 
     // sobel
-    i8* sobel_operator_result;
-    i8* sobel_normalize_result;
-    i8* sobel;
+    u8* sobel_operator_result;
+    u8* sobel_normalize_result;
+    u8* sobel;
 
     // mediana
-    i8* image_median_result = NULL;
-    i8* local_image_median_result = NULL;
-    i8* image_median;
+    u8* image_median_result = NULL;
+    u8* local_image_median_result = NULL;
+    u8* image_median;
 
     // mpi
     int *recv_counts = NULL;
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
         grayscale = convert_pixels_to_gray_array(grayscale_pixels, width, height);
 
         // inicjalizacja tabel dla głównego procesu
-        image_median_result = (i8*)malloc(width * height * sizeof(i8));
+        image_median_result = (u8*)malloc(width * height * sizeof(u8));
         
     }
     rank_intervals = (int*)malloc(size * sizeof(int));
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
     
     MPI_Barrier(MPI_COMM_WORLD);
     interval = recv_counts[rank];
-    i8* local_grayscale = (i8*)malloc(interval*sizeof(i8));
+    u8* local_grayscale = (u8*)malloc(interval*sizeof(u8));
     MPI_Scatterv(grayscale, recv_counts, displacements, MPI_UINT8_T, local_grayscale, interval, MPI_UINT8_T, 0, MPI_COMM_WORLD);
 
     // obliczenie histogramu
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     median_t1 = MPI_Wtime();
-    local_image_median_result = (i8*)malloc((local_end-local_start)*sizeof(i8));
+    local_image_median_result = (u8*)malloc((local_end-local_start)*sizeof(u8));
     median2(local_image_median_result, local_grayscale, interval);
     MPI_Gatherv(local_image_median_result, interval, MPI_UINT8_T, image_median_result, recv_counts, displacements, MPI_UINT8_T, 0, MPI_COMM_WORLD);
     median_t2 = MPI_Wtime();

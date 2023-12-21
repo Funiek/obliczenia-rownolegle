@@ -178,7 +178,9 @@ void median2(i8* local_pixels, i8* pixels, int interval) {
 }
 
 
-void histogram_values(i8* image, int* histogram, int start, int end) {
+void histogram_values(const i8* image, int* histogram, int start, int end) {
+    int n_threads=omp_get_max_threads();
+
     for (int i = start; i < end; i++) {
         histogram[image[i]]++;
     }
