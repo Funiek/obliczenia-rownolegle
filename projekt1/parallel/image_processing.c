@@ -135,15 +135,6 @@ u8* median(u8* pixels, int width, int height, int start, int end, int rank) {
     return local_pixels;
 }
 
-void median2(u8* local_pixels, u8* pixels, int interval) {
-    u8 matrix[9];
-
-    for(int i = 0; i < interval; i++) { 
-        local_pixels[i] = pixels[i]; 
-    }
-}
-
-
 void histogram_values(const u8* image, u32* histogram, int start, int end) {
     for (int i = start; i < end; i++) {
         histogram[image[i]]++;

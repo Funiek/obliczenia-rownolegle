@@ -58,9 +58,9 @@ int main(int argc, char **argv)
     image_name[strlen(image_path)-4] = '\0';
 
     // stringi na nazwy filtrów do zapisu do plików
-    char image_path_gray[strlen(image_name)+15];
-    char image_path_sobel[strlen(image_name)+13];
-    char image_path_median[strlen(image_name)+13];
+    char image_path_gray[100];
+    char image_path_sobel[100];
+    char image_path_median[100];
 
     // czasy
     double sobel_t1, sobel_t2, median_t1, median_t2, histogram_t1, histogram_t2, sobel_diff, median_diff, histogram_diff, sobel_global, median_global, histogram_global;

@@ -11,7 +11,7 @@ void print_image(Pixel* pixels, int width, int height) {
 
 Pixel* convert_to_grayscale(Pixel* pixels, int width, int height) {
     Pixel* new_pixels = (Pixel*)malloc(width*height*sizeof(Pixel));
-    u8 gray_color;
+    i8 gray_color;
 
     for(int i = 0; i < height; i++) {
         for(int j = 0; j < width; j++) {
@@ -26,7 +26,7 @@ Pixel* convert_to_grayscale(Pixel* pixels, int width, int height) {
     return new_pixels;
 }
 
-int multiply_and_add(u8* arr, int* kernel, int N) {
+int multiply_and_add(i8* arr, int* kernel, int N) {
     int sum = 0;
     
     for(int i = 0; i < N; i++) {
@@ -36,10 +36,10 @@ int multiply_and_add(u8* arr, int* kernel, int N) {
     return sum;
 }
 
-u8* sobel_operator(u8* pixels, int width, int height) {
-    u8* new_pixels = (u8*)malloc(width*height*sizeof(u8));
-    u8 gray_color;
-    u8 sobel_prep[9];
+i8* sobel_operator(i8* pixels, int width, int height) {
+    i8* new_pixels = (i8*)malloc(width*height*sizeof(i8));
+    i8 gray_color;
+    i8 sobel_prep[9];
     int x_kernel[9] = {-1, 0, 1,
                        -2, 0, 2,
                        -1, 0, 1};
@@ -75,10 +75,10 @@ u8* sobel_operator(u8* pixels, int width, int height) {
     return new_pixels;
 }
 
-u8* sobel_normalize(u8* pixels, int width, int height) {
-    u8* new_pixels = (u8*)malloc(width*height*sizeof(u8));
-    u8 max = pixels[0];
-    u8 min = pixels[0];
+i8* sobel_normalize(i8* pixels, int width, int height) {
+    i8* new_pixels = (i8*)malloc(width*height*sizeof(i8));
+    i8 max = pixels[0];
+    i8 min = pixels[0];
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
@@ -93,16 +93,16 @@ u8* sobel_normalize(u8* pixels, int width, int height) {
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            new_pixels[i*width+j] = (u8)(((double)(pixels[(i)*width+j] - min) / (double)(max - min)) * 255.0); // wartość znormalizowana
+            new_pixels[i*width+j] = (i8)(((double)(pixels[(i)*width+j] - min) / (double)(max - min)) * 255.0); // wartość znormalizowana
         }
     }
 
     return new_pixels;
 }
 
-u8* median(u8* pixels, int width, int height) {
-    u8* new_pixels = (u8*)malloc(width*height*sizeof(u8));
-    u8 matrix[9];
+i8* median(i8* pixels, int width, int height) {
+    i8* new_pixels = (i8*)malloc(width*height*sizeof(i8));
+    i8 matrix[9];
 
     // TODO warunki brzegowe
     for(int i = 0; i < height; i++) {
@@ -126,7 +126,7 @@ u8* median(u8* pixels, int width, int height) {
     return new_pixels;
 }
 
-void histogram_values(u8* image, int* histogram, int width, int height) {
+void histogram_values(i8* image, int* histogram, int width, int height) {
     for(int i = 0; i < 256; i++) {
         histogram[i] = 0;
     }

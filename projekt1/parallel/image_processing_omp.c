@@ -158,6 +158,7 @@ void histogram_values(const u8* image, u32* histogram, int start, int end) {
             local_histogram[image[i]]++;
         }
     }
+
     for(int i = 0; i < n_threads; i++) {
         for(int j = 0; j < 256; j++) {
             histogram[j] += local_histograms[i][j];

@@ -6,7 +6,7 @@ void swap(int *a, int *b) {
     *b = temp;
 }
 
-void insertion_sort(u8* arr, int n) {
+void insertion_sort(i8* arr, int n) {
     int i, key, j;
     for (i = 1; i < n; i++) {
         key = arr[i];

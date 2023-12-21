@@ -6,7 +6,7 @@ TARGET_SEQ = main_seq
 TARGET_MPI = main_mpi
 TARGET_MPI_OMP = main_mpi_omp
 
-SRCS_SEQ = main_seq2.c seq/utils.c seq/array_conversion.c seq/image_processing.c
+SRCS_SEQ = main_seq.c seq/utils.c seq/array_conversion.c seq/image_processing.c
 SRCS_MPI = main_mpi.c parallel/utils.c parallel/array_conversion.c parallel/image_processing.c
 SRCS_MPI_OMP = main_mpi_omp.c parallel/utils_omp.c parallel/array_conversion_omp.c parallel/image_processing_omp.c
 
