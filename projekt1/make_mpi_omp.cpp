@@ -54,17 +54,14 @@ int main(int argc, char **argv)
     // nazwa zdjecia
     char* image_path = argv[1];
     char image_name[100];
-    strcpy(image_name, image_path);
-
-    image_name[strlen(image_path)-4] = '\0';
 
     // stringi na nazwy filtrów do zapisu do plików
-    char image_path_gray[strlen(image_name)+15];
-    char image_path_sobel[strlen(image_name)+13];
-    char image_path_median[strlen(image_name)+13];
+    char image_path_gray[100];
+    char image_path_sobel[100];
+    char image_path_median[100];
 
     // czasy
-    double sobel_t1, sobel_t2, median_t1, median_t2, histogram_t1, histogram_t2, sobel_diff, median_diff, histogram_diff, sobel_global, median_global, histogram_global;
+    double sobel_t1, sobel_t2, median_t1, median_t2, histogram_t1, histogram_t2, sobel_diff, median_diff, histogram_diff, sobel_global_sum, median_global_sum, histogram_global_sum, sobel_global_max, median_global_max, histogram_global_max;
 
     // inicjalizacja MPI
     int rank, size;
@@ -76,6 +73,10 @@ int main(int argc, char **argv)
     // główny proces wykonuje przerobienie zdjęcia na odpowiednie struktury, 
     // konwersję do skali szarości oraz przygotowanie nazw plików docelowych
     if(rank == 0) {
+        // wybranie samej nazwy pliku ze zdjeciem
+        strcpy(image_name, image_path);
+        image_name[strlen(image_path)-4] = '\0';
+
         // dodanie prefixa z nazwą folderu
         strcpy(image_path_gray, "img/");
         strcpy(image_path_sobel, "img/");
@@ -129,8 +130,6 @@ int main(int argc, char **argv)
     for (int i = 0; i < size; i++) {
         recv_counts[i] = rank_intervals[i];  // każdy proces wysyła określoną liczbę danych
         displacements[i] = (i==0) ? 0 : displacements[i - 1] + rank_intervals[i - 1];  // przesunięcie w buforze dla każdego procesu
-
-        // printf("i:%d recv_counts:%d displacements:%d\n", i, recv_counts[i], displacements[i]);
     }
     interval = recv_counts[rank];
 
@@ -158,22 +157,16 @@ int main(int argc, char **argv)
 
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     median_t1 = MPI_Wtime();
-    local_image_median_result = median(grayscale, width, height, local_start, local_end, rank);
+    local_image_median_result = median(grayscale, width, height, local_start, local_end);
     MPI_Gatherv(local_image_median_result, interval, MPI_UINT8_T, image_median_result, recv_counts, displacements, MPI_UINT8_T, 0, MPI_COMM_WORLD);
     median_t2 = MPI_Wtime();
 
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     sobel_t1 = MPI_Wtime();
-    local_sobel_operator_result = sobel_operator(grayscale, width, height, local_start, local_end, rank);
-    local_sobel_normalize_result = sobel_normalize(local_sobel_operator_result, local_start, local_end, rank);
+    local_sobel_operator_result = sobel_operator(grayscale, width, height, local_start, local_end);
+    local_sobel_normalize_result = sobel_normalize(local_sobel_operator_result, local_start, local_end);
     MPI_Gatherv(local_sobel_normalize_result, interval, MPI_UINT8_T, sobel_operator_result, recv_counts, displacements, MPI_UINT8_T, 0, MPI_COMM_WORLD);
     sobel_t2 = MPI_Wtime();
-
-    // printf("Proces %d otrzymał dane:\n", rank);
-    // for (int i = 0; i < interval; i++) {
-        // printf("rank:%d data:%d\n", rank, grayscale[i]);
-    // }
-    // printf("\n");
 
     // liczenie i sumowanie czasow
     sobel_diff = sobel_t2 - sobel_t1;
@@ -181,14 +174,18 @@ int main(int argc, char **argv)
     histogram_diff = histogram_t2 - histogram_t1;
 
     // przegadaj z Maćkiem czy to ma sens czy lepiej suma / size
-    // MPI_Reduce(&sobel_diff, &sobel_global, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&sobel_diff, &sobel_global, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&median_diff, &median_global, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
-    MPI_Reduce(&histogram_diff, &histogram_global, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&sobel_diff, &sobel_global_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&median_diff, &median_global_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&histogram_diff, &histogram_global_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&sobel_diff, &sobel_global_sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&median_diff, &median_global_sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&histogram_diff, &histogram_global_sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
     if(rank == 0) {
         // wypisanie czasow
-        printf("Czasy:\nHistogram: %f\nMedian: %f\nSobel: %f\n", (double) histogram_global / size, (double) median_global / size, (double) sobel_global / size);
+        printf("Czasy:\nHistogram MAX: %f\nMedian MAX: %f\nSobel MAX: %f\n", (double) histogram_global_max, (double) median_global_max, (double) sobel_global_max);
+        printf("Czasy:\nHistogram AVG: %f\nMedian AVG: %f\nSobel AVG: %f\n", (double) histogram_global_sum / size, (double) median_global_sum / size, (double) sobel_global_sum / size);
+        printf("Czasy:\nHistogram MASTER: %f\nMedian MASTER: %f\nSobel MASTER: %f\n", (double) histogram_diff, (double) median_diff, (double) sobel_diff);
 
         // zapis zdjęcia w skali szarości do pliku
         grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);

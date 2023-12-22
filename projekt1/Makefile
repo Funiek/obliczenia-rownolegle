@@ -1,5 +1,6 @@
 CC = gcc
 MPICC = mpicc
+MPICPP = mpic++
 LDFLAGS = -lm
 OMPFLAG = -fopenmp
 TARGET_SEQ = main_seq
@@ -8,7 +9,7 @@ TARGET_MPI_OMP = main_mpi_omp
 
 SRCS_SEQ = main_seq.c seq/utils.c seq/array_conversion.c seq/image_processing.c
 SRCS_MPI = main_mpi.c parallel/utils.c parallel/array_conversion.c parallel/image_processing.c
-SRCS_MPI_OMP = main_mpi_omp.c parallel/utils_omp.c parallel/array_conversion_omp.c parallel/image_processing_omp.c
+SRCS_MPI_OMP = main_mpi_omp.cpp parallel/utils_omp.cpp parallel/array_conversion_omp.cpp parallel/image_processing_omp.cpp
 
 OBJS_SEQ = $(SRCS_SEQ:.c=.o)
 OBJS_MPI = $(SRCS_MPI:.c=.o)
@@ -21,9 +22,9 @@ mpi: override CC=mpicc
 mpi: $(OBJS_MPI)
 	$(MPICC) -o $(TARGET_MPI) $(OBJS_MPI) $(LDFLAGS)
 
-omp: override CC=mpicc
+omp: override CC=mpic++
 omp: $(OBJS_MPI_OMP)
-	$(MPICC) $(OMPFLAG) -o $(TARGET_MPI_OMP) $(OBJS_MPI_OMP) $(LDFLAGS)
+	$(MPICPP) $(OMPFLAG) -o $(TARGET_MPI_OMP) $(OBJS_MPI_OMP) $(LDFLAGS)
 
 %.o: %.c
 	$(CC) -c $< -o $@
