@@ -13,7 +13,7 @@ SRCS_MPI_OMP = main_mpi_omp.cpp parallel/utils_omp.cpp parallel/array_conversion
 
 OBJS_SEQ = $(SRCS_SEQ:.c=.o)
 OBJS_MPI = $(SRCS_MPI:.c=.o)
-OBJS_MPI_OMP = $(SRCS_MPI_OMP:.cpp=.o)
+OBJS_MPI_OMP = $(SRCS_MPI_OMP:.c=.o)
 
 seq: $(OBJS_SEQ)
 	$(CC) -o $(TARGET_SEQ) $(OBJS_SEQ) $(LDFLAGS)
