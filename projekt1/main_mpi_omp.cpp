@@ -165,8 +165,8 @@ int main(int argc, char **argv)
     // zastosowanie filtru medianowego (nowa tablica wynikowa)
     sobel_t1 = MPI_Wtime();
     local_sobel_operator_result = sobel_operator(grayscale, width, height, local_start, local_end);
-    local_sobel_normalize_result = sobel_normalize(local_sobel_operator_result, local_start, local_end);
-    MPI_Gatherv(local_sobel_normalize_result, interval, MPI_UINT8_T, sobel_operator_result, recv_counts, displacements, MPI_UINT8_T, 0, MPI_COMM_WORLD);
+    // local_sobel_normalize_result = sobel_normalize(local_sobel_operator_result, local_start, local_end);
+    MPI_Gatherv(local_sobel_operator_result, interval, MPI_UINT8_T, sobel_operator_result, recv_counts, displacements, MPI_UINT8_T, 0, MPI_COMM_WORLD);
     sobel_t2 = MPI_Wtime();
 
     // liczenie i sumowanie czasow
@@ -220,7 +220,7 @@ int main(int argc, char **argv)
     free(rank_intervals);
     free(local_image_median_result);
     free(local_sobel_operator_result);
-    free(local_sobel_normalize_result);
+    // free(local_sobel_normalize_result);
 
     MPI_Finalize();
     return 0;

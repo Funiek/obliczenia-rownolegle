@@ -1,7 +1,7 @@
 CC = gcc
 MPICC = mpicc
 MPICPP = mpic++
-LDFLAGS = -lm 
+LDFLAGS = -lm -O3
 OMPFLAG = -fopenmp
 TARGET_SEQ = main_seq
 TARGET_MPI = main_mpi

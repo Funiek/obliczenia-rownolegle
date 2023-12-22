@@ -74,7 +74,7 @@ u8* sobel_operator(const u8* pixels, int width, int height) {
         g_y = multiply_and_add(sobel_prep, y_kernel, 9);
         g = sqrt((g_x * g_x) + (g_y * g_y));
 
-        new_pixels[i] = g;
+        new_pixels[i] = (u8)g;
     }
 
     return new_pixels;

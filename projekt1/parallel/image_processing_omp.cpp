@@ -73,7 +73,7 @@ u8* sobel_operator(const u8* pixels, int width, int height, int start, int end) 
         g_y = multiply_and_add(sobel_prep, y_kernel, 9);
         g = sqrt((g_x * g_x) + (g_y * g_y));
 
-        new_pixels[i - start] = g;
+        new_pixels[i - start] = (u8)g;
     }
 
     return new_pixels;
@@ -106,6 +106,7 @@ u8* median(const u8* pixels, int width, int height, int start, int end) {
     u8 matrix[9];
     bool top_touched, bottom_touched, left_touched, right_touched;
 
+    #pragma omp parallel for
     for(int i = start; i < end; i++) {
         // 0 1 2
         // 3 4 5
@@ -126,7 +127,8 @@ u8* median(const u8* pixels, int width, int height, int start, int end) {
         matrix[8] = (!bottom_touched && !right_touched) ? pixels[i+1+width] : pixels[i];
 
         insertion_sort(matrix, 9);
-
+        
+        #pragma omp critical
         local_pixels[i - start] = matrix[4];   
     }
 

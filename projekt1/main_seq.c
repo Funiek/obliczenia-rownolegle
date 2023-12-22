@@ -98,35 +98,35 @@ int main(int argc, char **argv)
     // filtr z wykorzystaniem operatora sobela
     clock_gettime(CLOCK_MONOTONIC_RAW, &sobel_t1);
     sobel_operator_result = sobel_operator(grayscale, width, height);
-    sobel_normalize_result = sobel_normalize(sobel_operator_result, width, height);
+    // sobel_normalize_result = sobel_normalize(sobel_operator_result, width, height);
     clock_gettime(CLOCK_MONOTONIC_RAW, &sobel_t2);
     
     
     printf("Czasy:\nHistogram: %ld\nMedian: %ld\nSobel: %ld\n", diff_ts(histogram_t1, histogram_t2).tv_nsec, diff_ts(median_t1, median_t2).tv_nsec, diff_ts(sobel_t1, sobel_t2).tv_nsec);
 
     // zapis zdjęcia w skali szarości do pliku
-    // grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
-    // save_image_png(image_path_gray, grayscale_in_RGB, width, height);
+    grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
+    save_image_png(image_path_gray, grayscale_in_RGB, width, height);
     
     // zapis zdjęcia z zastosowanym filtrem medianowym
-    // image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
-    // save_image_png(image_path_median, image_median, width, height);
+    image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
+    save_image_png(image_path_median, image_median, width, height);
 
     // zapis zdjęcia po filtrze z operatorem sobela do pliku
-    // sobel = convert_gray_to_colors_array(sobel_normalize_result, width, height, CHANNELS);
-    // save_image_png(image_path_sobel, sobel, width, height);
+    sobel = convert_gray_to_colors_array(sobel_operator_result, width, height, CHANNELS);
+    save_image_png(image_path_sobel, sobel, width, height);
 
     // zwalnianie pamięci
     stbi_image_free(rgb_image);
-    // free(sobel);
+    free(sobel);
     free(grayscale);
-    // free(image_median);
+    free(image_median);
     free(pixels);
     free(grayscale_pixels);
     free(sobel_operator_result);
-    free(sobel_normalize_result);
+    // free(sobel_normalize_result);
     free(image_median_result);
-    // free(grayscale_in_RGB);
+    free(grayscale_in_RGB);
 
     return 0;
 }
