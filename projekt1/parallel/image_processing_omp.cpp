@@ -106,7 +106,6 @@ u8* median(const u8* pixels, int width, int height, int start, int end, int rank
     u8 matrix[9];
     bool top_touched, bottom_touched, left_touched, right_touched;
 
-    // printf("rank:%d start:%d end:%d offset:%d width:%d height:%d\n", rank, start, end, offeset, width, height);
     for(int i = start; i < end; i++) {
         // 0 1 2
         // 3 4 5
@@ -116,7 +115,6 @@ u8* median(const u8* pixels, int width, int height, int start, int end, int rank
         left_touched = ((i-1)%width == width-1) ? true : false;
         right_touched = ((i+1)%width == 0) ? true : false;
         
-        // printf("dupa i:%d\n%d %d %d\n%d %d %d\n%d %d %d\n==========================\n",i, i-1-width, i-width, i+1-width, i-1, i, i+1, i-1+width, i+width, i+1+width);
         matrix[0] = (!left_touched && !top_touched) ? pixels[i-1-width] : pixels[i];
         matrix[1] = (!top_touched) ? pixels[i-width] : pixels[i];
         matrix[2] = (!top_touched && !right_touched) ? pixels[i+1-width] : pixels[i];

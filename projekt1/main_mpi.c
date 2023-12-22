@@ -187,16 +187,16 @@ int main(int argc, char **argv)
         printf("Czasy:\nHistogram MASTER: %f\nMedian MASTER: %f\nSobel MASTER: %f\n", (double) histogram_diff, (double) median_diff, (double) sobel_diff);
 
         // zapis zdjęcia w skali szarości do pliku
-        grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
-        save_image_png(image_path_gray, grayscale_in_RGB, width, height);
+        // grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
+        // save_image_png(image_path_gray, grayscale_in_RGB, width, height);
 
         // zapis zdjęcia z zastosowanym filtrem medianowym
-        image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
-        save_image_png(image_path_median, image_median, width, height);
+        // image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
+        // save_image_png(image_path_median, image_median, width, height);
 
         // zapis zdjęcia po filtrze z operatorem sobela do pliku
-        sobel = convert_gray_to_colors_array(sobel_operator_result, width, height, CHANNELS);
-        save_image_png(image_path_sobel, sobel, width, height);
+        // sobel = convert_gray_to_colors_array(sobel_operator_result, width, height, CHANNELS);
+        // save_image_png(image_path_sobel, sobel, width, height);
     }
     
     // główny proces zwalnia miejsce ze zmiennych i zapisuje zdjęcia
@@ -205,11 +205,11 @@ int main(int argc, char **argv)
         stbi_image_free(rgb_image);
         free(pixels);
         free(grayscale_pixels);
-        free(grayscale_in_RGB);
-        free(image_median);
+        // free(grayscale_in_RGB);
+        // free(image_median);
         free(image_median_result);
         free(sobel_operator_result);
-        free(sobel);
+        // free(sobel);
     }
     // zwalnianie pamięci
     free(grayscale);
