@@ -1,0 +1,800 @@
+900 900 4
+
+id: 0 w: 900 h: 900 start: 0 end: 135000
+id: 4 w: 900 h: 900 start: 540000 end: 675000
+id: 3 w: 900 h: 900 start: 405000 end: 540000
+id: 5 w: 900 h: 900 start: 675000 end: 810000
+id: 1 w: 900 h: 900 start: 135000 end: 270000
+id: 2 w: 900 h: 900 start: 270000 end: 405000
+Czasy:
+Histogram MAX: 0.001277
+Median MAX: 0.214173
+Sobel MAX: 0.009883
+Czasy:
+Histogram AVG: 0.001070
+Median AVG: 0.079967
+Sobel AVG: 0.009277
+Czasy:
+Histogram MASTER: 0.001056
+Median MASTER: 0.213634
+Sobel MASTER: 0.008852
+900 900 4
+
+id: 0 w: 900 h: 900 start: 0 end: 135000
+id: 4 w: 900 h: 900 start: 540000 end: 675000
+id: 5 w: 900 h: 900 start: 675000 end: 810000
+id: 1 w: 900 h: 900 start: 135000 end: 270000
+id: 3 w: 900 h: 900 start: 405000 end: 540000
+id: 2 w: 900 h: 900 start: 270000 end: 405000
+Czasy:
+Histogram MAX: 0.001058
+Median MAX: 0.231489
+Sobel MAX: 0.010853
+Czasy:
+Histogram AVG: 0.000627
+Median AVG: 0.085820
+Sobel AVG: 0.009841
+Czasy:
+Histogram MASTER: 0.000341
+Median MASTER: 0.231274
+Sobel MASTER: 0.009139
+900 900 4
+
+id: 0 w: 900 h: 900 start: 0 end: 135000
+id: 2 w: 900 h: 900 start: 270000 end: 405000
+id: 3 w: 900 h: 900 start: 405000 end: 540000
+id: 5 w: 900 h: 900 start: 675000 end: 810000
+id: 4 w: 900 h: 900 start: 540000 end: 675000
+id: 1 w: 900 h: 900 start: 135000 end: 270000
+Czasy:
+Histogram MAX: 0.001169
+Median MAX: 0.240694
+Sobel MAX: 0.011591
+Czasy:
+Histogram AVG: 0.000711
+Median AVG: 0.086746
+Sobel AVG: 0.010227
+Czasy:
+Histogram MASTER: 0.000611
+Median MASTER: 0.240465
+Sobel MASTER: 0.008814
+900 900 4
+
+id: 0 w: 900 h: 900 start: 0 end: 135000
+id: 5 w: 900 h: 900 start: 675000 end: 810000
+id: 4 w: 900 h: 900 start: 540000 end: 675000
+id: 1 w: 900 h: 900 start: 135000 end: 270000
+id: 3 w: 900 h: 900 start: 405000 end: 540000
+id: 2 w: 900 h: 900 start: 270000 end: 405000
+Czasy:
+Histogram MAX: 0.001272
+Median MAX: 0.214273
+Sobel MAX: 0.010516
+Czasy:
+Histogram AVG: 0.000877
+Median AVG: 0.077904
+Sobel AVG: 0.009486
+Czasy:
+Histogram MASTER: 0.000923
+Median MASTER: 0.213947
+Sobel MASTER: 0.008501
+900 900 4
+
+id: 0 w: 900 h: 900 start: 0 end: 135000
+id: 4 w: 900 h: 900 start: 540000 end: 675000
+id: 1 w: 900 h: 900 start: 135000 end: 270000
+id: 2 w: 900 h: 900 start: 270000 end: 405000
+id: 3 w: 900 h: 900 start: 405000 end: 540000
+id: 5 w: 900 h: 900 start: 675000 end: 810000
+Czasy:
+Histogram MAX: 0.001267
+Median MAX: 0.037576
+Sobel MAX: 0.011875
+Czasy:
+Histogram AVG: 0.000692
+Median AVG: 0.019283
+Sobel AVG: 0.010699
+Czasy:
+Histogram MASTER: 0.000608
+Median MASTER: 0.037304
+Sobel MASTER: 0.009136
+3 3 4
+
+id: 0 w: 3 h: 3 start: 0 end: 1
+id: 4 w: 3 h: 3 start: 4 end: 5
+id: 3 w: 3 h: 3 start: 3 end: 4
+id: 2 w: 3 h: 3 start: 2 end: 3
+id: 1 w: 3 h: 3 start: 1 end: 2
+id: 5 w: 3 h: 3 start: 5 end: 9
+Czasy:
+Histogram MAX: 0.000653
+Median MAX: 0.000444
+Sobel MAX: 0.000005
+Czasy:
+Histogram AVG: 0.000388
+Median AVG: 0.000105
+Sobel AVG: 0.000003
+Czasy:
+Histogram MASTER: 0.000653
+Median MASTER: 0.000444
+Sobel MASTER: 0.000005
+3 3 4
+
+id: 0 w: 3 h: 3 start: 0 end: 1
+id: 5 w: 3 h: 3 start: 5 end: 9
+id: 4 w: 3 h: 3 start: 4 end: 5
+id: 3 w: 3 h: 3 start: 3 end: 4
+id: 1 w: 3 h: 3 start: 1 end: 2
+id: 2 w: 3 h: 3 start: 2 end: 3
+Czasy:
+Histogram MAX: 0.000914
+Median MAX: 0.000614
+Sobel MAX: 0.000009
+Czasy:
+Histogram AVG: 0.000505
+Median AVG: 0.000142
+Sobel AVG: 0.000005
+Czasy:
+Histogram MASTER: 0.000914
+Median MASTER: 0.000614
+Sobel MASTER: 0.000006
+3 3 4
+
+id: 0 w: 3 h: 3 start: 0 end: 1
+id: 4 w: 3 h: 3 start: 4 end: 5
+id: 2 w: 3 h: 3 start: 2 end: 3
+id: 5 w: 3 h: 3 start: 5 end: 9
+id: 3 w: 3 h: 3 start: 3 end: 4
+id: 1 w: 3 h: 3 start: 1 end: 2
+Czasy:
+Histogram MAX: 0.008740
+Median MAX: 0.000617
+Sobel MAX: 0.000035
+Czasy:
+Histogram AVG: 0.003148
+Median AVG: 0.000154
+Sobel AVG: 0.000011
+Czasy:
+Histogram MASTER: 0.008740
+Median MASTER: 0.000617
+Sobel MASTER: 0.000035
+3 3 4
+
+id: 0 w: 3 h: 3 start: 0 end: 1
+id: 5 w: 3 h: 3 start: 5 end: 9
+id: 4 w: 3 h: 3 start: 4 end: 5
+id: 2 w: 3 h: 3 start: 2 end: 3
+id: 1 w: 3 h: 3 start: 1 end: 2
+id: 3 w: 3 h: 3 start: 3 end: 4
+Czasy:
+Histogram MAX: 0.000863
+Median MAX: 0.000429
+Sobel MAX: 0.000023
+Czasy:
+Histogram AVG: 0.000510
+Median AVG: 0.000119
+Sobel AVG: 0.000010
+Czasy:
+Histogram MASTER: 0.000863
+Median MASTER: 0.000429
+Sobel MASTER: 0.000023
+3 3 4
+
+id: 0 w: 3 h: 3 start: 0 end: 1
+id: 5 w: 3 h: 3 start: 5 end: 9
+id: 1 w: 3 h: 3 start: 1 end: 2
+id: 2 w: 3 h: 3 start: 2 end: 3
+id: 3 w: 3 h: 3 start: 3 end: 4
+id: 4 w: 3 h: 3 start: 4 end: 5
+Czasy:
+Histogram MAX: 0.000764
+Median MAX: 0.000580
+Sobel MAX: 0.000036
+Czasy:
+Histogram AVG: 0.000472
+Median AVG: 0.000147
+Sobel AVG: 0.000010
+Czasy:
+Histogram MASTER: 0.000764
+Median MASTER: 0.000580
+Sobel MASTER: 0.000036
+1000 1000 4
+
+id: 0 w: 1000 h: 1000 start: 0 end: 166666
+id: 5 w: 1000 h: 1000 start: 833330 end: 1000000
+id: 1 w: 1000 h: 1000 start: 166666 end: 333332
+id: 2 w: 1000 h: 1000 start: 333332 end: 499998
+id: 3 w: 1000 h: 1000 start: 499998 end: 666664
+id: 4 w: 1000 h: 1000 start: 666664 end: 833330
+Czasy:
+Histogram MAX: 0.001248
+Median MAX: 0.027894
+Sobel MAX: 0.023496
+Czasy:
+Histogram AVG: 0.000651
+Median AVG: 0.018322
+Sobel AVG: 0.014893
+Czasy:
+Histogram MASTER: 0.000329
+Median MASTER: 0.027894
+Sobel MASTER: 0.011836
+1000 1000 4
+
+id: 0 w: 1000 h: 1000 start: 0 end: 166666
+id: 1 w: 1000 h: 1000 start: 166666 end: 333332
+id: 2 w: 1000 h: 1000 start: 333332 end: 499998
+id: 3 w: 1000 h: 1000 start: 499998 end: 666664
+id: 5 w: 1000 h: 1000 start: 833330 end: 1000000
+id: 4 w: 1000 h: 1000 start: 666664 end: 833330
+Czasy:
+Histogram MAX: 0.001360
+Median MAX: 0.015693
+Sobel MAX: 0.016458
+Czasy:
+Histogram AVG: 0.000679
+Median AVG: 0.013974
+Sobel AVG: 0.014493
+Czasy:
+Histogram MASTER: 0.000348
+Median MASTER: 0.015214
+Sobel MASTER: 0.014096
+1000 1000 4
+
+id: 0 w: 1000 h: 1000 start: 0 end: 166666
+id: 1 w: 1000 h: 1000 start: 166666 end: 333332
+id: 4 w: 1000 h: 1000 start: 666664 end: 833330
+id: 2 w: 1000 h: 1000 start: 333332 end: 499998
+id: 3 w: 1000 h: 1000 start: 499998 end: 666664
+id: 5 w: 1000 h: 1000 start: 833330 end: 1000000
+Czasy:
+Histogram MAX: 0.001418
+Median MAX: 0.027664
+Sobel MAX: 0.014214
+Czasy:
+Histogram AVG: 0.000743
+Median AVG: 0.017260
+Sobel AVG: 0.013081
+Czasy:
+Histogram MASTER: 0.000368
+Median MASTER: 0.027320
+Sobel MASTER: 0.012400
+1000 1000 4
+
+id: 0 w: 1000 h: 1000 start: 0 end: 166666
+id: 2 w: 1000 h: 1000 start: 333332 end: 499998
+id: 1 w: 1000 h: 1000 start: 166666 end: 333332
+id: 4 w: 1000 h: 1000 start: 666664 end: 833330
+id: 3 w: 1000 h: 1000 start: 499998 end: 666664
+id: 5 w: 1000 h: 1000 start: 833330 end: 1000000
+Czasy:
+Histogram MAX: 0.000851
+Median MAX: 0.027360
+Sobel MAX: 0.013405
+Czasy:
+Histogram AVG: 0.000548
+Median AVG: 0.017124
+Sobel AVG: 0.011978
+Czasy:
+Histogram MASTER: 0.000353
+Median MASTER: 0.027088
+Sobel MASTER: 0.011115
+1000 1000 4
+
+id: 0 w: 1000 h: 1000 start: 0 end: 166666
+id: 1 w: 1000 h: 1000 start: 166666 end: 333332
+id: 2 w: 1000 h: 1000 start: 333332 end: 499998
+id: 5 w: 1000 h: 1000 start: 833330 end: 1000000
+id: 4 w: 1000 h: 1000 start: 666664 end: 833330
+id: 3 w: 1000 h: 1000 start: 499998 end: 666664
+Czasy:
+Histogram MAX: 0.001326
+Median MAX: 0.014982
+Sobel MAX: 0.015265
+Czasy:
+Histogram AVG: 0.000811
+Median AVG: 0.013795
+Sobel AVG: 0.014706
+Czasy:
+Histogram MASTER: 0.000607
+Median MASTER: 0.014647
+Sobel MASTER: 0.014628
+500 500 4
+
+id: 0 w: 500 h: 500 start: 0 end: 41666
+id: 1 w: 500 h: 500 start: 41666 end: 83332
+id: 2 w: 500 h: 500 start: 83332 end: 124998
+id: 3 w: 500 h: 500 start: 124998 end: 166664
+id: 4 w: 500 h: 500 start: 166664 end: 208330
+id: 5 w: 500 h: 500 start: 208330 end: 250000
+Czasy:
+Histogram MAX: 0.001167
+Median MAX: 0.004740
+Sobel MAX: 0.005211
+Czasy:
+Histogram AVG: 0.000676
+Median AVG: 0.003990
+Sobel AVG: 0.004273
+Czasy:
+Histogram MASTER: 0.000630
+Median MASTER: 0.004433
+Sobel MASTER: 0.004024
+500 500 4
+
+id: 0 w: 500 h: 500 start: 0 end: 41666
+id: 1 w: 500 h: 500 start: 41666 end: 83332
+id: 2 w: 500 h: 500 start: 83332 end: 124998
+id: 5 w: 500 h: 500 start: 208330 end: 250000
+id: 4 w: 500 h: 500 start: 166664 end: 208330
+id: 3 w: 500 h: 500 start: 124998 end: 166664
+Czasy:
+Histogram MAX: 0.000598
+Median MAX: 0.004064
+Sobel MAX: 0.003967
+Czasy:
+Histogram AVG: 0.000416
+Median AVG: 0.003429
+Sobel AVG: 0.003612
+Czasy:
+Histogram MASTER: 0.000124
+Median MASTER: 0.003619
+Sobel MASTER: 0.003967
+500 500 4
+
+id: 0 w: 500 h: 500 start: 0 end: 41666
+id: 1 w: 500 h: 500 start: 41666 end: 83332
+id: 2 w: 500 h: 500 start: 83332 end: 124998
+id: 3 w: 500 h: 500 start: 124998 end: 166664
+id: 5 w: 500 h: 500 start: 208330 end: 250000
+id: 4 w: 500 h: 500 start: 166664 end: 208330
+Czasy:
+Histogram MAX: 0.001070
+Median MAX: 0.004906
+Sobel MAX: 0.004925
+Czasy:
+Histogram AVG: 0.000746
+Median AVG: 0.004387
+Sobel AVG: 0.004569
+Czasy:
+Histogram MASTER: 0.000906
+Median MASTER: 0.004593
+Sobel MASTER: 0.004925
+500 500 4
+
+id: 0 w: 500 h: 500 start: 0 end: 41666
+id: 5 w: 500 h: 500 start: 208330 end: 250000
+id: 2 w: 500 h: 500 start: 83332 end: 124998
+id: 3 w: 500 h: 500 start: 124998 end: 166664
+id: 1 w: 500 h: 500 start: 41666 end: 83332
+id: 4 w: 500 h: 500 start: 166664 end: 208330
+Czasy:
+Histogram MAX: 0.000870
+Median MAX: 0.003648
+Sobel MAX: 0.003994
+Czasy:
+Histogram AVG: 0.000513
+Median AVG: 0.003386
+Sobel AVG: 0.003635
+Czasy:
+Histogram MASTER: 0.000344
+Median MASTER: 0.003462
+Sobel MASTER: 0.003663
+500 500 4
+
+id: 0 w: 500 h: 500 start: 0 end: 41666
+id: 1 w: 500 h: 500 start: 41666 end: 83332
+id: 2 w: 500 h: 500 start: 83332 end: 124998
+id: 3 w: 500 h: 500 start: 124998 end: 166664
+id: 5 w: 500 h: 500 start: 208330 end: 250000
+id: 4 w: 500 h: 500 start: 166664 end: 208330
+Czasy:
+Histogram MAX: 0.001146
+Median MAX: 0.003788
+Sobel MAX: 0.004071
+Czasy:
+Histogram AVG: 0.000603
+Median AVG: 0.003392
+Sobel AVG: 0.003607
+Czasy:
+Histogram MASTER: 0.000284
+Median MASTER: 0.003504
+Sobel MASTER: 0.003628
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 16666666
+id: 2 w: 10000 h: 10000 start: 33333332 end: 49999998
+id: 1 w: 10000 h: 10000 start: 16666666 end: 33333332
+id: 3 w: 10000 h: 10000 start: 49999998 end: 66666664
+id: 5 w: 10000 h: 10000 start: 83333330 end: 100000000
+id: 4 w: 10000 h: 10000 start: 66666664 end: 83333330
+Czasy:
+Histogram MAX: 0.026576
+Median MAX: 1.449008
+Sobel MAX: 1.826503
+Czasy:
+Histogram AVG: 0.025410
+Median AVG: 1.350267
+Sobel AVG: 1.639473
+Czasy:
+Histogram MASTER: 0.024905
+Median MASTER: 1.448704
+Sobel MASTER: 1.607780
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 16666666
+id: 1 w: 10000 h: 10000 start: 16666666 end: 33333332
+id: 4 w: 10000 h: 10000 start: 66666664 end: 83333330
+id: 5 w: 10000 h: 10000 start: 83333330 end: 100000000
+id: 3 w: 10000 h: 10000 start: 49999998 end: 66666664
+id: 2 w: 10000 h: 10000 start: 33333332 end: 49999998
+Czasy:
+Histogram MAX: 0.026172
+Median MAX: 1.450182
+Sobel MAX: 1.655654
+Czasy:
+Histogram AVG: 0.025379
+Median AVG: 1.376552
+Sobel AVG: 1.597657
+Czasy:
+Histogram MASTER: 0.025118
+Median MASTER: 1.450182
+Sobel MASTER: 1.620047
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 16666666
+id: 2 w: 10000 h: 10000 start: 33333332 end: 49999998
+id: 4 w: 10000 h: 10000 start: 66666664 end: 83333330
+id: 1 w: 10000 h: 10000 start: 16666666 end: 33333332
+id: 5 w: 10000 h: 10000 start: 83333330 end: 100000000
+id: 3 w: 10000 h: 10000 start: 49999998 end: 66666664
+Czasy:
+Histogram MAX: 0.026699
+Median MAX: 1.448091
+Sobel MAX: 1.788639
+Czasy:
+Histogram AVG: 0.025377
+Median AVG: 1.382333
+Sobel AVG: 1.566269
+Czasy:
+Histogram MASTER: 0.024850
+Median MASTER: 1.448064
+Sobel MASTER: 1.609288
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 16666666
+id: 1 w: 10000 h: 10000 start: 16666666 end: 33333332
+id: 4 w: 10000 h: 10000 start: 66666664 end: 83333330
+id: 5 w: 10000 h: 10000 start: 83333330 end: 100000000
+id: 2 w: 10000 h: 10000 start: 33333332 end: 49999998
+id: 3 w: 10000 h: 10000 start: 49999998 end: 66666664
+Czasy:
+Histogram MAX: 0.026611
+Median MAX: 1.448764
+Sobel MAX: 1.709826
+Czasy:
+Histogram AVG: 0.025544
+Median AVG: 1.368917
+Sobel AVG: 1.596425
+Czasy:
+Histogram MASTER: 0.025403
+Median MASTER: 1.448764
+Sobel MASTER: 1.605120
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 16666666
+id: 1 w: 10000 h: 10000 start: 16666666 end: 33333332
+id: 4 w: 10000 h: 10000 start: 66666664 end: 83333330
+id: 2 w: 10000 h: 10000 start: 33333332 end: 49999998
+id: 5 w: 10000 h: 10000 start: 83333330 end: 100000000
+id: 3 w: 10000 h: 10000 start: 49999998 end: 66666664
+Czasy:
+Histogram MAX: 0.026657
+Median MAX: 1.601251
+Sobel MAX: 1.839836
+Czasy:
+Histogram AVG: 0.025429
+Median AVG: 1.407571
+Sobel AVG: 1.681137
+Czasy:
+Histogram MASTER: 0.024915
+Median MASTER: 1.600971
+Sobel MASTER: 1.598562
+640 480 4
+
+id: 0 w: 640 h: 480 start: 0 end: 51200
+id: 2 w: 640 h: 480 start: 102400 end: 153600
+id: 3 w: 640 h: 480 start: 153600 end: 204800
+id: 4 w: 640 h: 480 start: 204800 end: 256000
+id: 1 w: 640 h: 480 start: 51200 end: 102400
+id: 5 w: 640 h: 480 start: 256000 end: 307200
+Czasy:
+Histogram MAX: 0.001222
+Median MAX: 0.013709
+Sobel MAX: 0.006252
+Czasy:
+Histogram AVG: 0.000725
+Median AVG: 0.010944
+Sobel AVG: 0.005177
+Czasy:
+Histogram MASTER: 0.000607
+Median MASTER: 0.013472
+Sobel MASTER: 0.005778
+640 480 4
+
+id: 0 w: 640 h: 480 start: 0 end: 51200
+id: 5 w: 640 h: 480 start: 256000 end: 307200
+id: 4 w: 640 h: 480 start: 204800 end: 256000
+id: 3 w: 640 h: 480 start: 153600 end: 204800
+id: 1 w: 640 h: 480 start: 51200 end: 102400
+id: 2 w: 640 h: 480 start: 102400 end: 153600
+Czasy:
+Histogram MAX: 0.000956
+Median MAX: 0.010385
+Sobel MAX: 0.006864
+Czasy:
+Histogram AVG: 0.000672
+Median AVG: 0.008601
+Sobel AVG: 0.005408
+Czasy:
+Histogram MASTER: 0.000331
+Median MASTER: 0.010385
+Sobel MASTER: 0.004307
+640 480 4
+
+id: 0 w: 640 h: 480 start: 0 end: 51200
+id: 1 w: 640 h: 480 start: 51200 end: 102400
+id: 3 w: 640 h: 480 start: 153600 end: 204800
+id: 5 w: 640 h: 480 start: 256000 end: 307200
+id: 4 w: 640 h: 480 start: 204800 end: 256000
+id: 2 w: 640 h: 480 start: 102400 end: 153600
+Czasy:
+Histogram MAX: 0.001106
+Median MAX: 0.022039
+Sobel MAX: 0.004084
+Czasy:
+Histogram AVG: 0.000545
+Median AVG: 0.012277
+Sobel AVG: 0.003863
+Czasy:
+Histogram MASTER: 0.000337
+Median MASTER: 0.021799
+Sobel MASTER: 0.003741
+640 480 4
+
+id: 0 w: 640 h: 480 start: 0 end: 51200
+id: 3 w: 640 h: 480 start: 153600 end: 204800
+id: 5 w: 640 h: 480 start: 256000 end: 307200
+id: 4 w: 640 h: 480 start: 204800 end: 256000
+id: 2 w: 640 h: 480 start: 102400 end: 153600
+id: 1 w: 640 h: 480 start: 51200 end: 102400
+Czasy:
+Histogram MAX: 0.001313
+Median MAX: 0.008325
+Sobel MAX: 0.004982
+Czasy:
+Histogram AVG: 0.000644
+Median AVG: 0.007726
+Sobel AVG: 0.004265
+Czasy:
+Histogram MASTER: 0.000324
+Median MASTER: 0.008138
+Sobel MASTER: 0.004158
+640 480 4
+
+id: 0 w: 640 h: 480 start: 0 end: 51200
+id: 2 w: 640 h: 480 start: 102400 end: 153600
+id: 1 w: 640 h: 480 start: 51200 end: 102400
+id: 3 w: 640 h: 480 start: 153600 end: 204800
+id: 5 w: 640 h: 480 start: 256000 end: 307200
+id: 4 w: 640 h: 480 start: 204800 end: 256000
+Czasy:
+Histogram MAX: 0.000730
+Median MAX: 0.042010
+Sobel MAX: 0.005770
+Czasy:
+Histogram AVG: 0.000512
+Median AVG: 0.029927
+Sobel AVG: 0.004052
+Czasy:
+Histogram MASTER: 0.000579
+Median MASTER: 0.041866
+Sobel MASTER: 0.003570
+640 480 4
+
+id: 0 w: 640 h: 480 start: 0 end: 51200
+id: 2 w: 640 h: 480 start: 102400 end: 153600
+id: 3 w: 640 h: 480 start: 153600 end: 204800
+id: 5 w: 640 h: 480 start: 256000 end: 307200
+id: 1 w: 640 h: 480 start: 51200 end: 102400
+id: 4 w: 640 h: 480 start: 204800 end: 256000
+Czasy:
+Histogram MAX: 0.000741
+Median MAX: 0.009308
+Sobel MAX: 0.005924
+Czasy:
+Histogram AVG: 0.000489
+Median AVG: 0.007989
+Sobel AVG: 0.004788
+Czasy:
+Histogram MASTER: 0.000328
+Median MASTER: 0.009078
+Sobel MASTER: 0.004285
+640 480 4
+
+id: 0 w: 640 h: 480 start: 0 end: 51200
+id: 1 w: 640 h: 480 start: 51200 end: 102400
+id: 2 w: 640 h: 480 start: 102400 end: 153600
+id: 3 w: 640 h: 480 start: 153600 end: 204800
+id: 5 w: 640 h: 480 start: 256000 end: 307200
+id: 4 w: 640 h: 480 start: 204800 end: 256000
+Czasy:
+Histogram MAX: 0.000749
+Median MAX: 0.021024
+Sobel MAX: 0.004175
+Czasy:
+Histogram AVG: 0.000444
+Median AVG: 0.014358
+Sobel AVG: 0.003830
+Czasy:
+Histogram MASTER: 0.000128
+Median MASTER: 0.020672
+Sobel MASTER: 0.003778
+640 480 4
+
+id: 0 w: 640 h: 480 start: 0 end: 51200
+id: 1 w: 640 h: 480 start: 51200 end: 102400
+id: 3 w: 640 h: 480 start: 153600 end: 204800
+id: 2 w: 640 h: 480 start: 102400 end: 153600
+id: 5 w: 640 h: 480 start: 256000 end: 307200
+id: 4 w: 640 h: 480 start: 204800 end: 256000
+Czasy:
+Histogram MAX: 0.000962
+Median MAX: 0.045584
+Sobel MAX: 0.003822
+Czasy:
+Histogram AVG: 0.000513
+Median AVG: 0.025313
+Sobel AVG: 0.003702
+Czasy:
+Histogram MASTER: 0.000364
+Median MASTER: 0.045359
+Sobel MASTER: 0.003583
+640 480 4
+
+id: 0 w: 640 h: 480 start: 0 end: 51200
+id: 1 w: 640 h: 480 start: 51200 end: 102400
+id: 5 w: 640 h: 480 start: 256000 end: 307200
+id: 2 w: 640 h: 480 start: 102400 end: 153600
+id: 3 w: 640 h: 480 start: 153600 end: 204800
+id: 4 w: 640 h: 480 start: 204800 end: 256000
+Czasy:
+Histogram MAX: 0.000882
+Median MAX: 0.037080
+Sobel MAX: 0.004076
+Czasy:
+Histogram AVG: 0.000520
+Median AVG: 0.020359
+Sobel AVG: 0.003721
+Czasy:
+Histogram MASTER: 0.000136
+Median MASTER: 0.036965
+Sobel MASTER: 0.003374
+640 480 4
+
+id: 0 w: 640 h: 480 start: 0 end: 51200
+id: 5 w: 640 h: 480 start: 256000 end: 307200
+id: 4 w: 640 h: 480 start: 204800 end: 256000
+id: 1 w: 640 h: 480 start: 51200 end: 102400
+id: 2 w: 640 h: 480 start: 102400 end: 153600
+id: 3 w: 640 h: 480 start: 153600 end: 204800
+Czasy:
+Histogram MAX: 0.000775
+Median MAX: 0.008040
+Sobel MAX: 0.004519
+Czasy:
+Histogram AVG: 0.000485
+Median AVG: 0.007449
+Sobel AVG: 0.004264
+Czasy:
+Histogram MASTER: 0.000367
+Median MASTER: 0.007711
+Sobel MASTER: 0.004126
+512 512 3
+
+id: 0 w: 512 h: 512 start: 0 end: 43690
+id: 1 w: 512 h: 512 start: 43690 end: 87380
+id: 2 w: 512 h: 512 start: 87380 end: 131070
+id: 3 w: 512 h: 512 start: 131070 end: 174760
+id: 5 w: 512 h: 512 start: 218450 end: 262144
+id: 4 w: 512 h: 512 start: 174760 end: 218450
+Czasy:
+Histogram MAX: 0.000960
+Median MAX: 0.227452
+Sobel MAX: 0.003474
+Czasy:
+Histogram AVG: 0.000576
+Median AVG: 0.082964
+Sobel AVG: 0.003321
+Czasy:
+Histogram MASTER: 0.000295
+Median MASTER: 0.227122
+Sobel MASTER: 0.003231
+512 512 3
+
+id: 0 w: 512 h: 512 start: 0 end: 43690
+id: 4 w: 512 h: 512 start: 174760 end: 218450
+id: 1 w: 512 h: 512 start: 43690 end: 87380
+id: 3 w: 512 h: 512 start: 131070 end: 174760
+id: 5 w: 512 h: 512 start: 218450 end: 262144
+id: 2 w: 512 h: 512 start: 87380 end: 131070
+Czasy:
+Histogram MAX: 0.001096
+Median MAX: 0.011403
+Sobel MAX: 0.004232
+Czasy:
+Histogram AVG: 0.000630
+Median AVG: 0.009560
+Sobel AVG: 0.003850
+Czasy:
+Histogram MASTER: 0.000603
+Median MASTER: 0.011004
+Sobel MASTER: 0.004073
+512 512 3
+
+id: 0 w: 512 h: 512 start: 0 end: 43690
+id: 2 w: 512 h: 512 start: 87380 end: 131070
+id: 3 w: 512 h: 512 start: 131070 end: 174760
+id: 5 w: 512 h: 512 start: 218450 end: 262144
+id: 4 w: 512 h: 512 start: 174760 end: 218450
+id: 1 w: 512 h: 512 start: 43690 end: 87380
+Czasy:
+Histogram MAX: 0.001037
+Median MAX: 0.008523
+Sobel MAX: 0.003939
+Czasy:
+Histogram AVG: 0.000598
+Median AVG: 0.007603
+Sobel AVG: 0.003622
+Czasy:
+Histogram MASTER: 0.000295
+Median MASTER: 0.007985
+Sobel MASTER: 0.003434
+512 512 3
+
+id: 0 w: 512 h: 512 start: 0 end: 43690
+id: 1 w: 512 h: 512 start: 43690 end: 87380
+id: 2 w: 512 h: 512 start: 87380 end: 131070
+id: 3 w: 512 h: 512 start: 131070 end: 174760
+id: 5 w: 512 h: 512 start: 218450 end: 262144
+id: 4 w: 512 h: 512 start: 174760 end: 218450
+Czasy:
+Histogram MAX: 0.001002
+Median MAX: 0.229660
+Sobel MAX: 0.003398
+Czasy:
+Histogram AVG: 0.000535
+Median AVG: 0.081400
+Sobel AVG: 0.003243
+Czasy:
+Histogram MASTER: 0.000296
+Median MASTER: 0.229346
+Sobel MASTER: 0.003091
+512 512 3
+
+id: 0 w: 512 h: 512 start: 0 end: 43690
+id: 4 w: 512 h: 512 start: 174760 end: 218450
+id: 1 w: 512 h: 512 start: 43690 end: 87380
+id: 3 w: 512 h: 512 start: 131070 end: 174760
+id: 5 w: 512 h: 512 start: 218450 end: 262144
+id: 2 w: 512 h: 512 start: 87380 end: 131070
+Czasy:
+Histogram MAX: 0.001214
+Median MAX: 0.013240
+Sobel MAX: 0.005654
+Czasy:
+Histogram AVG: 0.000659
+Median AVG: 0.010384
+Sobel AVG: 0.004294
+Czasy:
+Histogram MASTER: 0.000346
+Median MASTER: 0.013198
+Sobel MASTER: 0.004567
