@@ -1,0 +1,80 @@
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 50000000
+id: 1 w: 10000 h: 10000 start: 50000000 end: 100000000
+Czasy:
+Histogram MAX: 0,031011
+Median MAX: 0,270504
+Sobel MAX: 0,177592
+Czasy:
+Histogram AVG: 0,031005
+Median AVG: 0,270210
+Sobel AVG: 0,177501
+Czasy:
+Histogram MASTER: 0,031011
+Median MASTER: 0,270504
+Sobel MASTER: 0,177592
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 50000000
+id: 1 w: 10000 h: 10000 start: 50000000 end: 100000000
+Czasy:
+Histogram MAX: 0,033124
+Median MAX: 0,257837
+Sobel MAX: 0,176746
+Czasy:
+Histogram AVG: 0,033122
+Median AVG: 0,257490
+Sobel AVG: 0,176653
+Czasy:
+Histogram MASTER: 0,033124
+Median MASTER: 0,257837
+Sobel MASTER: 0,176560
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 50000000
+id: 1 w: 10000 h: 10000 start: 50000000 end: 100000000
+Czasy:
+Histogram MAX: 0,033400
+Median MAX: 0,253526
+Sobel MAX: 0,167924
+Czasy:
+Histogram AVG: 0,033396
+Median AVG: 0,253265
+Sobel AVG: 0,167835
+Czasy:
+Histogram MASTER: 0,033400
+Median MASTER: 0,253526
+Sobel MASTER: 0,167924
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 50000000
+id: 1 w: 10000 h: 10000 start: 50000000 end: 100000000
+Czasy:
+Histogram MAX: 0,032392
+Median MAX: 0,264798
+Sobel MAX: 0,181399
+Czasy:
+Histogram AVG: 0,032388
+Median AVG: 0,264479
+Sobel AVG: 0,181338
+Czasy:
+Histogram MASTER: 0,032392
+Median MASTER: 0,264798
+Sobel MASTER: 0,181399
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 50000000
+id: 1 w: 10000 h: 10000 start: 50000000 end: 100000000
+Czasy:
+Histogram MAX: 0,030421
+Median MAX: 0,293462
+Sobel MAX: 0,183587
+Czasy:
+Histogram AVG: 0,030416
+Median AVG: 0,293072
+Sobel AVG: 0,183510
+Czasy:
+Histogram MASTER: 0,030421
+Median MASTER: 0,293462
+Sobel MASTER: 0,183432

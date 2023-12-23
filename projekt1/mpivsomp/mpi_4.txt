@@ -1,0 +1,90 @@
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 25000000
+id: 1 w: 10000 h: 10000 start: 25000000 end: 50000000
+id: 2 w: 10000 h: 10000 start: 50000000 end: 75000000
+id: 3 w: 10000 h: 10000 start: 75000000 end: 100000000
+Czasy:
+Histogram MAX: 0,033313
+Median MAX: 0,675111
+Sobel MAX: 0,906861
+Czasy:
+Histogram AVG: 0,033297
+Median AVG: 0,666759
+Sobel AVG: 0,896344
+Czasy:
+Histogram MASTER: 0,033313
+Median MASTER: 0,675111
+Sobel MASTER: 0,889617
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 25000000
+id: 1 w: 10000 h: 10000 start: 25000000 end: 50000000
+id: 2 w: 10000 h: 10000 start: 50000000 end: 75000000
+id: 3 w: 10000 h: 10000 start: 75000000 end: 100000000
+Czasy:
+Histogram MAX: 0,033274
+Median MAX: 0,683394
+Sobel MAX: 0,914923
+Czasy:
+Histogram AVG: 0,033265
+Median AVG: 0,675924
+Sobel AVG: 0,905446
+Czasy:
+Histogram MASTER: 0,033274
+Median MASTER: 0,683394
+Sobel MASTER: 0,899543
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 25000000
+id: 1 w: 10000 h: 10000 start: 25000000 end: 50000000
+id: 2 w: 10000 h: 10000 start: 50000000 end: 75000000
+id: 3 w: 10000 h: 10000 start: 75000000 end: 100000000
+Czasy:
+Histogram MAX: 0,033533
+Median MAX: 0,686259
+Sobel MAX: 0,911278
+Czasy:
+Histogram AVG: 0,033516
+Median AVG: 0,682195
+Sobel AVG: 0,907933
+Czasy:
+Histogram MASTER: 0,033533
+Median MASTER: 0,686259
+Sobel MASTER: 0,905166
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 25000000
+id: 1 w: 10000 h: 10000 start: 25000000 end: 50000000
+id: 2 w: 10000 h: 10000 start: 50000000 end: 75000000
+id: 3 w: 10000 h: 10000 start: 75000000 end: 100000000
+Czasy:
+Histogram MAX: 0,033788
+Median MAX: 0,680607
+Sobel MAX: 0,905811
+Czasy:
+Histogram AVG: 0,033766
+Median AVG: 0,673367
+Sobel AVG: 0,896919
+Czasy:
+Histogram MASTER: 0,033788
+Median MASTER: 0,680607
+Sobel MASTER: 0,891183
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 25000000
+id: 1 w: 10000 h: 10000 start: 25000000 end: 50000000
+id: 2 w: 10000 h: 10000 start: 50000000 end: 75000000
+id: 3 w: 10000 h: 10000 start: 75000000 end: 100000000
+Czasy:
+Histogram MAX: 0,033284
+Median MAX: 0,708316
+Sobel MAX: 0,902674
+Czasy:
+Histogram AVG: 0,033264
+Median AVG: 0,703389
+Sobel AVG: 0,898325
+Czasy:
+Histogram MASTER: 0,033284
+Median MASTER: 0,708316
+Sobel MASTER: 0,899230

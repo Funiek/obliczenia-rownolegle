@@ -147,11 +147,11 @@ int main(int argc, char **argv)
     histogram_t2 = MPI_Wtime();
 
     // wypisanie histogramu
-    if (rank == 0) {
-        for(int i = 0; i < 256; i++) {
-            printf("%d. Natężenie: %u\n", i, histogram[i]);
-        }
-    }
+    // if (rank == 0) {
+    //     for(int i = 0; i < 256; i++) {
+    //         printf("%d. Natężenie: %u\n", i, histogram[i]);
+    //     }
+    // }
 
     // czekamy aż procesy wszystkie będą gotowe na wykonanie operacji medianowej
     MPI_Barrier(MPI_COMM_WORLD);
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
     MPI_Gatherv(local_image_median_result, interval, MPI_UINT8_T, image_median_result, recv_counts, displacements, MPI_UINT8_T, 0, MPI_COMM_WORLD);
     median_t2 = MPI_Wtime();
 
-    // zastosowanie filtru medianowego (nowa tablica wynikowa)
+    // zastosowanie operatora sobela (nowa tablica wynikowa)
     sobel_t1 = MPI_Wtime();
     local_sobel_operator_result = sobel_operator(grayscale, width, height, local_start, local_end);
     // local_sobel_normalize_result = sobel_normalize(local_sobel_operator_result, local_start, local_end);
@@ -174,7 +174,7 @@ int main(int argc, char **argv)
     median_diff = median_t2 - median_t1;
     histogram_diff = histogram_t2 - histogram_t1;
 
-    // przegadaj z Maćkiem czy to ma sens czy lepiej suma / size
+    // zbieranie czasów do roota
     MPI_Reduce(&sobel_diff, &sobel_global_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     MPI_Reduce(&median_diff, &median_global_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     MPI_Reduce(&histogram_diff, &histogram_global_max, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
@@ -189,16 +189,16 @@ int main(int argc, char **argv)
         printf("Czasy:\nHistogram MASTER: %f\nMedian MASTER: %f\nSobel MASTER: %f\n", (double) histogram_diff, (double) median_diff, (double) sobel_diff);
 
         // zapis zdjęcia w skali szarości do pliku
-        // grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
-        // save_image_png(image_path_gray, grayscale_in_RGB, width, height);
+        grayscale_in_RGB = convert_gray_to_colors_array(grayscale, width, height, CHANNELS);
+        save_image_png(image_path_gray, grayscale_in_RGB, width, height);
 
         // zapis zdjęcia z zastosowanym filtrem medianowym
-        // image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
-        // save_image_png(image_path_median, image_median, width, height);
+        image_median = convert_gray_to_colors_array(image_median_result, width, height, CHANNELS);
+        save_image_png(image_path_median, image_median, width, height);
 
         // zapis zdjęcia po filtrze z operatorem sobela do pliku
-        // sobel = convert_gray_to_colors_array(sobel_operator_result, width, height, CHANNELS);
-        // save_image_png(image_path_sobel, sobel, width, height);
+        sobel = convert_gray_to_colors_array(sobel_operator_result, width, height, CHANNELS);
+        save_image_png(image_path_sobel, sobel, width, height);
     }
     
     // główny proces zwalnia miejsce ze zmiennych i zapisuje zdjęcia
@@ -207,11 +207,11 @@ int main(int argc, char **argv)
         stbi_image_free(rgb_image);
         free(pixels);
         free(grayscale_pixels);
-        // free(grayscale_in_RGB);
-        // free(image_median);
+        free(grayscale_in_RGB);
+        free(image_median);
         free(image_median_result);
         free(sobel_operator_result);
-        // free(sobel);
+        free(sobel);
     }
     // zwalnianie pamięci
     free(grayscale);

@@ -26,7 +26,7 @@ omp: override CC=mpic++
 omp: $(OBJS_MPI_OMP)
 	$(MPICPP) $(OMPFLAG) -o $(TARGET_MPI_OMP) $(OBJS_MPI_OMP) $(LDFLAGS)
 
-%.o: %.cpp
+%.o: %.c
 	$(CC) -c $< -o $@
 
 clean:

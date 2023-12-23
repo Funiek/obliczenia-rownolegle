@@ -1,0 +1,100 @@
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 16666666
+id: 1 w: 10000 h: 10000 start: 16666666 end: 33333332
+id: 2 w: 10000 h: 10000 start: 33333332 end: 49999998
+id: 3 w: 10000 h: 10000 start: 49999998 end: 66666664
+id: 4 w: 10000 h: 10000 start: 66666664 end: 83333330
+id: 5 w: 10000 h: 10000 start: 83333330 end: 100000000
+Czasy:
+Histogram MAX: 0,032348
+Median MAX: 0,147564
+Sobel MAX: 0,105902
+Czasy:
+Histogram AVG: 0,032298
+Median AVG: 0,142709
+Sobel AVG: 0,100587
+Czasy:
+Histogram MASTER: 0,032348
+Median MASTER: 0,147564
+Sobel MASTER: 0,098091
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 16666666
+id: 1 w: 10000 h: 10000 start: 16666666 end: 33333332
+id: 2 w: 10000 h: 10000 start: 33333332 end: 49999998
+id: 3 w: 10000 h: 10000 start: 49999998 end: 66666664
+id: 4 w: 10000 h: 10000 start: 66666664 end: 83333330
+id: 5 w: 10000 h: 10000 start: 83333330 end: 100000000
+Czasy:
+Histogram MAX: 0,029488
+Median MAX: 0,150240
+Sobel MAX: 0,119510
+Czasy:
+Histogram AVG: 0,029437
+Median AVG: 0,140217
+Sobel AVG: 0,106738
+Czasy:
+Histogram MASTER: 0,029488
+Median MASTER: 0,150240
+Sobel MASTER: 0,099858
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 16666666
+id: 1 w: 10000 h: 10000 start: 16666666 end: 33333332
+id: 2 w: 10000 h: 10000 start: 33333332 end: 49999998
+id: 3 w: 10000 h: 10000 start: 49999998 end: 66666664
+id: 4 w: 10000 h: 10000 start: 66666664 end: 83333330
+id: 5 w: 10000 h: 10000 start: 83333330 end: 100000000
+Czasy:
+Histogram MAX: 0,026041
+Median MAX: 0,145135
+Sobel MAX: 0,092116
+Czasy:
+Histogram AVG: 0,025967
+Median AVG: 0,139939
+Sobel AVG: 0,088749
+Czasy:
+Histogram MASTER: 0,026041
+Median MASTER: 0,145135
+Sobel MASTER: 0,086809
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 16666666
+id: 1 w: 10000 h: 10000 start: 16666666 end: 33333332
+id: 2 w: 10000 h: 10000 start: 33333332 end: 49999998
+id: 3 w: 10000 h: 10000 start: 49999998 end: 66666664
+id: 4 w: 10000 h: 10000 start: 66666664 end: 83333330
+id: 5 w: 10000 h: 10000 start: 83333330 end: 100000000
+Czasy:
+Histogram MAX: 0,027727
+Median MAX: 0,150784
+Sobel MAX: 0,087152
+Czasy:
+Histogram AVG: 0,027673
+Median AVG: 0,147096
+Sobel AVG: 0,085319
+Czasy:
+Histogram MASTER: 0,027727
+Median MASTER: 0,150784
+Sobel MASTER: 0,084056
+10000 10000 4
+
+id: 0 w: 10000 h: 10000 start: 0 end: 16666666
+id: 1 w: 10000 h: 10000 start: 16666666 end: 33333332
+id: 2 w: 10000 h: 10000 start: 33333332 end: 49999998
+id: 3 w: 10000 h: 10000 start: 49999998 end: 66666664
+id: 4 w: 10000 h: 10000 start: 66666664 end: 83333330
+id: 5 w: 10000 h: 10000 start: 83333330 end: 100000000
+Czasy:
+Histogram MAX: 0,023210
+Median MAX: 0,152203
+Sobel MAX: 0,106294
+Czasy:
+Histogram AVG: 0,023157
+Median AVG: 0,144709
+Sobel AVG: 0,099292
+Czasy:
+Histogram MASTER: 0,023210
+Median MASTER: 0,152203
+Sobel MASTER: 0,094547
