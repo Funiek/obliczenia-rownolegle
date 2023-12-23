@@ -50,7 +50,6 @@ u8* sobel_operator(const u8* pixels, int width, int height, int start, int end) 
                        1, 2, 1};
     int g_x, g_y, g;
 
-    #pragma omp parallel for
     for(int i = start; i < end; i++) {
         top_touched = (i-width < 0) ? true : false;
         bottom_touched = (i+width >= width*height) ? true : false;
@@ -74,7 +73,6 @@ u8* sobel_operator(const u8* pixels, int width, int height, int start, int end) 
         g_y = multiply_and_add(sobel_prep, y_kernel, 9);
         g = sqrt((g_x * g_x) + (g_y * g_y));
 
-        #pragma omp critical
         new_pixels[i - start] = (u8)g;
     }
 

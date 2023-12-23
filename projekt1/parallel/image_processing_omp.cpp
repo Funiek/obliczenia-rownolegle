@@ -40,21 +40,21 @@ u8* sobel_operator(const u8* pixels, int width, int height, int start, int end) 
     u8* new_pixels = (u8*)malloc((end-start)*sizeof(u8));
     
     u8 sobel_prep[9];
-    bool top_touched, bottom_touched, left_touched, right_touched;
-
     int x_kernel[9] = {-1, 0, 1,
                        -2, 0, 2,
                        -1, 0, 1};
     int y_kernel[9] = {-1, -2, -1,
                        0, 0, 0,
                        1, 2, 1};
-    int g_x, g_y, g;
+    
 
+    #pragma omp parallel for firstprivate(sobel_prep,x_kernel,y_kernel)
     for(int i = start; i < end; i++) {
-        top_touched = (i-width < 0) ? true : false;
-        bottom_touched = (i+width >= width*height) ? true : false;
-        left_touched = ((i-1)%width == width-1) ? true : false;
-        right_touched = ((i+1)%width == 0) ? true : false;
+        int g_x, g_y, g;
+        bool top_touched = (i-width < 0) ? true : false;
+        bool bottom_touched = (i+width >= width*height) ? true : false;
+        bool left_touched = ((i-1)%width == width-1) ? true : false;
+        bool right_touched = ((i+1)%width == 0) ? true : false;
         
         // 0 1 2
         // 3 4 5
@@ -102,19 +102,17 @@ u8* sobel_normalize(const u8* pixels, int start, int end) {
 
 u8* median(const u8* pixels, int width, int height, int start, int end) {
     u8* local_pixels = (u8*)malloc((end-start)*sizeof(u8));
-
     u8 matrix[9];
-    bool top_touched, bottom_touched, left_touched, right_touched;
 
-    #pragma omp parallel for
+    #pragma omp parallel for firstprivate(matrix)
     for(int i = start; i < end; i++) {
         // 0 1 2
         // 3 4 5
         // 6 7 8
-        top_touched = (i-width < 0) ? true : false;
-        bottom_touched = (i+width >= width*height) ? true : false;
-        left_touched = ((i-1)%width == width-1) ? true : false;
-        right_touched = ((i+1)%width == 0) ? true : false;
+        bool top_touched = (i-width < 0) ? true : false;
+        bool bottom_touched = (i+width >= width*height) ? true : false;
+        bool left_touched = ((i-1)%width == width-1) ? true : false;
+        bool right_touched = ((i+1)%width == 0) ? true : false;
         
         matrix[0] = (!left_touched && !top_touched) ? pixels[i-1-width] : pixels[i];
         matrix[1] = (!top_touched) ? pixels[i-width] : pixels[i];
@@ -128,7 +126,6 @@ u8* median(const u8* pixels, int width, int height, int start, int end) {
 
         insertion_sort(matrix, 9);
         
-        #pragma omp critical
         local_pixels[i - start] = matrix[4];   
     }
 

@@ -122,8 +122,8 @@ int main(int argc, char **argv)
     MPI_Gather(&interval, 1, MPI_INT, rank_intervals, 1, MPI_INT, 0, MPI_COMM_WORLD);
     MPI_Bcast(rank_intervals, size, MPI_INT, 0, MPI_COMM_WORLD);
 
-    recv_counts = (int*)malloc(size * sizeof(int));
-    displacements = (int*)malloc(size * sizeof(int));
+    recv_counts = (int*)malloc(size * sizeof(int)); // interwały dla każdego procesu
+    displacements = (int*)malloc(size * sizeof(int)); // przesunięcia
 
     // inicjalizacja recv_counts i displacements
     for (int i = 0; i < size; i++) {
