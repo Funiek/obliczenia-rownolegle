@@ -2,6 +2,7 @@
 #include <iostream>
 #include <chrono>
 #include <random>
+#include <omp.h>
 
 #define tp std::chrono::high_resolution_clock::time_point
 
@@ -10,12 +11,31 @@ double get_rand() {
 }
 
 
+// void execute(double* vecA, double* vecB, double* vecC, int N) {
+//     omp_set_num_threads(4);
+
+
+//     #pragma omp parallel for schedule(guided) collapse(3)
+//     for(int i = 0; i < N; i++) {
+//         for(int j = 0; j < N; j++) {
+//             for(int k = 0; k < N; k++) {
+//                 vecC[i * N + j] += vecA[i * N + k] * vecB[k * N + j];
+//             }
+//         }
+//     }
+// }
+
 void execute(double* vecA, double* vecB, double* vecC, int N) {
+    omp_set_num_threads(4);
+
+    #pragma omp parallel for schedule(guided) collapse(2)
     for(int i = 0; i < N; i++) {
         for(int j = 0; j < N; j++) {
+            double temp = 0.0;
             for(int k = 0; k < N; k++) {
-                vecC[i * N + j] += vecA[i * N + k] * vecB[k * N + j]; // dodawanie mnożenia wartości z wiersza z macierzy A z kolumną z macierzy B
+                temp += vecA[i * N + k] * vecB[k * N + j];
             }
+            vecC[i * N + j] = temp;
         }
     }
 }
@@ -29,16 +49,16 @@ int main(int argc, char** argv) {
     
 
     for(int i = 0; i < N*N; i++) {
-        vecA[i] = get_rand();
-        vecB[i] = get_rand();
+        vecA[i] = 1;
+        vecB[i] = 1;
         vecC[i] = 0;
     }
 
-    tp t1 = std::chrono::high_resolution_clock::now();
+    double t1 = omp_get_wtime();
 
     execute(vecA, vecB, vecC, N);
 
-    tp t2 = std::chrono::high_resolution_clock::now();
+    double t2 = omp_get_wtime();
 
     // for(int i = 0; i < N; i++) {
     //     for(int j = 0; j < N; j++) {
@@ -65,7 +85,7 @@ int main(int argc, char** argv) {
     //     std::cout << "\n";
     // }
 
-    printf("time (s): %lf\n", std::chrono::duration<double>(t2-t1).count());
+    printf("time (s): %lf\n", (t2-t1));
 
     delete[] vecA;
     delete[] vecB;

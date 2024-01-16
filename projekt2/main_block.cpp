@@ -10,10 +10,11 @@ double get_rand() {
 }
 
 void execute(double* vecA, double* vecB, double* vecC, int N) {
+    int x = 1;
     for(int i = 0; i < N; i++) {
         for(int j = 0; j < N; j++) {
             for(int k = 0; k < N; k++) {
-                printf("NORMAL: %d %d %d\n", (i * N + j), (i * N + k), (k * N + j));
+                printf("%d. NORMAL: %d %d %d\n",x++ ,(i * N + j), (i * N + k), (k * N + j));
                 vecC[i * N + j] += vecA[i * N + k] * vecB[k * N + j]; 
             }
         }
@@ -21,10 +22,11 @@ void execute(double* vecA, double* vecB, double* vecC, int N) {
 }
 
 void execute_2(double* vecA, double* vecB, double* vecC, int N, int K) {
+    int x = 1;
     for(int i = 0; i < K; i++) {
         for(int j = 0; j < K; j++) {
             for(int k = 0; k < K; k++) {
-                printf("BLOCK: %d %d %d\n", i, j, k);
+                printf("%d. BLOCK: %d %d %d\n",x++, i, j, k);
                 vecC[i * N + j] += vecA[i * N + k] * vecB[k * N + j]; 
             }
         }
@@ -32,9 +34,11 @@ void execute_2(double* vecA, double* vecB, double* vecC, int N, int K) {
 }
 
 void block_matrix_multiplication(double* vecA, double* vecB, double* vecC, int N, int K) {
+    int x = 1;
     for(int i = 0; i < N; i += K) {
         for(int j = 0; j < N; j += K) {
             for(int k = 0; k < N; k += K) {
+                printf("%d. PREBLOCK: ",x++);
                 double* sub_A = &vecA[i * N + k];
                 double* sub_B = &vecB[k * N + j];
                 double* sub_C = &vecC[i * N + j];
@@ -67,10 +71,10 @@ int main(int argc, char** argv) {
     
 
     for(int i = 0; i < N*N; i++) {
-        vecA[i] = get_rand();
-        vecB[i] = get_rand();
-        // vecA[i] = 2;
-        // vecB[i] = 2;
+        // vecA[i] = get_rand();
+        // vecB[i] = get_rand();
+        vecA[i] = 2;
+        vecB[i] = 2;
         vecC[i] = 0;
         vecA_seq[i] = vecA[i];
         vecB_seq[i] = vecB[i];
@@ -85,30 +89,39 @@ int main(int argc, char** argv) {
 
     tp t2 = std::chrono::high_resolution_clock::now();
 
-    // for(int i = 0; i < N; i++) {
-    //     for(int j = 0; j < N; j++) {
-    //         std::cout << vecA[i * N + j] << " ";
-    //     }
-    //     std::cout << "\n";
-    // }
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < N; j++) {
+            std::cout << vecA[i * N + j] << " ";
+        }
+        std::cout << "\n";
+    }
 
-    // std::cout << "\n";
+    std::cout << "\n";
 
-    // for(int i = 0; i < N; i++) {
-    //     for(int j = 0; j < N; j++) {
-    //         std::cout << vecB[i * N + j] << " ";
-    //     }
-    //     std::cout << "\n";
-    // }
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < N; j++) {
+            std::cout << vecB[i * N + j] << " ";
+        }
+        std::cout << "\n";
+    }
 
-    // std::cout << "\n";
+    std::cout << "\n";
 
-    // for(int i = 0; i < N; i++) {
-    //     for(int j = 0; j < N ; j++) {
-    //         std::cout << vecC[i * N + j] << " ";
-    //     }
-    //     std::cout << "\n";
-    // }
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < N ; j++) {
+            std::cout << vecC[i * N + j] << " ";
+        }
+        std::cout << "\n";
+    }
+
+    std::cout << "\n";
+
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < N ; j++) {
+            std::cout << vecC_seq[i * N + j] << " ";
+        }
+        std::cout << "\n";
+    }
 
     if(diff(vecC, vecC_seq, N)) {
         printf("\nNIEZGODNE!!!\n");
