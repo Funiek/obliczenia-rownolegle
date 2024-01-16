@@ -14,19 +14,19 @@ void execute(double* vecA, double* vecB, double* vecC, int N) {
     for(int i = 0; i < N; i++) {
         for(int j = 0; j < N; j++) {
             for(int k = 0; k < N; k++) {
-                printf("%d. NORMAL: %d %d %d\n",x++ ,(i * N + j), (i * N + k), (k * N + j));
+                // printf("%d. NORMAL: %d %d %d\n",x++ ,(i * N + j), (i * N + k), (k * N + j));
                 vecC[i * N + j] += vecA[i * N + k] * vecB[k * N + j]; 
             }
         }
     }
 }
 
-void execute_2(double* vecA, double* vecB, double* vecC, int N, int K) {
-    int x = 1;
-    for(int i = 0; i < K; i++) {
-        for(int j = 0; j < K; j++) {
-            for(int k = 0; k < K; k++) {
-                printf("%d. BLOCK: %d %d %d\n",x++, i, j, k);
+void execute_2(double* vecA, double* vecB, double* vecC, int N, int iter_size_i, int iter_size_j, int iter_size_k) {
+    // int x = 1;
+    for(int i = 0; i < iter_size_i; i++) {
+        for(int j = 0; j < iter_size_j; j++) {
+            for(int k = 0; k < iter_size_k; k++) {
+                // printf("%d. BLOCK: %d %d %d\n",x++, i, j, k);
                 vecC[i * N + j] += vecA[i * N + k] * vecB[k * N + j]; 
             }
         }
@@ -34,15 +34,20 @@ void execute_2(double* vecA, double* vecB, double* vecC, int N, int K) {
 }
 
 void block_matrix_multiplication(double* vecA, double* vecB, double* vecC, int N, int K) {
-    int x = 1;
+    // int x = 1;
     for(int i = 0; i < N; i += K) {
         for(int j = 0; j < N; j += K) {
             for(int k = 0; k < N; k += K) {
-                printf("%d. PREBLOCK: ",x++);
+                // printf("%d. PREBLOCK: ", x++);
                 double* sub_A = &vecA[i * N + k];
                 double* sub_B = &vecB[k * N + j];
                 double* sub_C = &vecC[i * N + j];
-                execute_2(sub_A, sub_B, sub_C, N, K);
+
+                int iter_size_i = (i + K <= N) ? K : (N - i);
+                int iter_size_j = (j + K <= N) ? K : (N - j);
+                int iter_size_k = (k + K <= N) ? K : (N - k);
+
+                execute_2(sub_A, sub_B, sub_C, N, iter_size_i, iter_size_j, iter_size_k);
             }
         }
     }
@@ -89,39 +94,39 @@ int main(int argc, char** argv) {
 
     tp t2 = std::chrono::high_resolution_clock::now();
 
-    for(int i = 0; i < N; i++) {
-        for(int j = 0; j < N; j++) {
-            std::cout << vecA[i * N + j] << " ";
-        }
-        std::cout << "\n";
-    }
+    // for(int i = 0; i < N; i++) {
+    //     for(int j = 0; j < N; j++) {
+    //         std::cout << vecA[i * N + j] << " ";
+    //     }
+    //     std::cout << "\n";
+    // }
 
-    std::cout << "\n";
+    // std::cout << "\n";
 
-    for(int i = 0; i < N; i++) {
-        for(int j = 0; j < N; j++) {
-            std::cout << vecB[i * N + j] << " ";
-        }
-        std::cout << "\n";
-    }
+    // for(int i = 0; i < N; i++) {
+    //     for(int j = 0; j < N; j++) {
+    //         std::cout << vecB[i * N + j] << " ";
+    //     }
+    //     std::cout << "\n";
+    // }
 
-    std::cout << "\n";
+    // std::cout << "\n";
 
-    for(int i = 0; i < N; i++) {
-        for(int j = 0; j < N ; j++) {
-            std::cout << vecC[i * N + j] << " ";
-        }
-        std::cout << "\n";
-    }
+    // for(int i = 0; i < N; i++) {
+    //     for(int j = 0; j < N ; j++) {
+    //         std::cout << vecC[i * N + j] << " ";
+    //     }
+    //     std::cout << "\n";
+    // }
 
-    std::cout << "\n";
+    // std::cout << "\n";
 
-    for(int i = 0; i < N; i++) {
-        for(int j = 0; j < N ; j++) {
-            std::cout << vecC_seq[i * N + j] << " ";
-        }
-        std::cout << "\n";
-    }
+    // for(int i = 0; i < N; i++) {
+    //     for(int j = 0; j < N ; j++) {
+    //         std::cout << vecC_seq[i * N + j] << " ";
+    //     }
+    //     std::cout << "\n";
+    // }
 
     if(diff(vecC, vecC_seq, N)) {
         printf("\nNIEZGODNE!!!\n");
