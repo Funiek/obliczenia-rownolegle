@@ -26,8 +26,6 @@ double get_rand() {
 // }
 
 void execute(double* vecA, double* vecB, double* vecC, int N) {
-    omp_set_num_threads(4);
-
     #pragma omp parallel for schedule(guided) collapse(2)
     for(int i = 0; i < N; i++) {
         for(int j = 0; j < N; j++) {
@@ -41,6 +39,8 @@ void execute(double* vecA, double* vecB, double* vecC, int N) {
 }
 
 int main(int argc, char** argv) {
+    omp_set_num_threads(4);
+    
     srand((unsigned) time(NULL));
     int N = atoi(argv[1]);
     double* vecA = new double[N*N];
