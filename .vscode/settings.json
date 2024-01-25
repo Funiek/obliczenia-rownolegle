@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "time.h": "c"
+        "time.h": "c",
+        "chrono": "cpp",
+        "iostream": "cpp",
+        "random": "cpp",
+        "new": "cpp",
+        "cstring": "cpp"
     }
 }

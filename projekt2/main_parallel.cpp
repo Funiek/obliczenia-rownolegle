@@ -3,27 +3,14 @@
 #include <chrono>
 #include <random>
 #include <omp.h>
+#include <cstring>
 
 #define tp std::chrono::high_resolution_clock::time_point
+#define ITERATIONS 10
 
 double get_rand() {
-    return 1 + (std::rand() % 5);
+    return 1.0 + (std::rand() / (float)RAND_MAX) * 5;
 }
-
-
-// void execute(double* vecA, double* vecB, double* vecC, int N) {
-//     omp_set_num_threads(4);
-
-
-//     #pragma omp parallel for schedule(guided) collapse(3)
-//     for(int i = 0; i < N; i++) {
-//         for(int j = 0; j < N; j++) {
-//             for(int k = 0; k < N; k++) {
-//                 vecC[i * N + j] += vecA[i * N + k] * vecB[k * N + j];
-//             }
-//         }
-//     }
-// }
 
 void execute(double* vecA, double* vecB, double* vecC, int N) {
     #pragma omp parallel for schedule(guided) collapse(2)
@@ -39,7 +26,7 @@ void execute(double* vecA, double* vecB, double* vecC, int N) {
 }
 
 int main(int argc, char** argv) {
-    omp_set_num_threads(4);
+    omp_set_num_threads(16);
     
     srand((unsigned) time(NULL));
     int N = atoi(argv[1]);
@@ -56,7 +43,11 @@ int main(int argc, char** argv) {
 
     double t1 = omp_get_wtime();
 
-    execute(vecA, vecB, vecC, N);
+    for (int i = 0; i < ITERATIONS; i++)
+    {
+        memset(vecC,0,sizeof(double)*N*N);
+        execute(vecA, vecB, vecC, N);
+    }
 
     double t2 = omp_get_wtime();
 
@@ -85,7 +76,7 @@ int main(int argc, char** argv) {
     //     std::cout << "\n";
     // }
 
-    printf("time (s): %lf\n", (t2-t1));
+    printf("time (s): %lf\n", (t2-t1)/ITERATIONS);
 
     delete[] vecA;
     delete[] vecB;

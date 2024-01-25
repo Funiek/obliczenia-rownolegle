@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <iostream>
 #include <chrono>
+#include <cstring>
 #include <random>
 
 #define tp std::chrono::high_resolution_clock::time_point
+#define ITERATIONS 10
 
 double get_rand() {
-    return 1 + (std::rand() % 5);
+    return 1.0 + (std::rand() / (float)RAND_MAX) * 5;
 }
 
 
@@ -36,8 +38,12 @@ int main(int argc, char** argv) {
 
     tp t1 = std::chrono::high_resolution_clock::now();
 
-    execute(vecA, vecB, vecC, N);
-
+    for (int i = 0; i < ITERATIONS; i++)
+    {
+        memset(vecC,0,sizeof(double)*N*N);
+        execute(vecA, vecB, vecC, N);
+    }
+    
     tp t2 = std::chrono::high_resolution_clock::now();
 
     // for(int i = 0; i < N; i++) {
@@ -65,7 +71,7 @@ int main(int argc, char** argv) {
     //     std::cout << "\n";
     // }
 
-    printf("time (s): %lf\n", std::chrono::duration<double>(t2-t1).count());
+    printf("time (s): %lf\n", std::chrono::duration<double>(t2-t1).count()/ITERATIONS);
 
     delete[] vecA;
     delete[] vecB;

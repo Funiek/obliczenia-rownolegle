@@ -3,11 +3,13 @@
 #include <chrono>
 #include <random>
 #include <omp.h>
+#include <cstring>
 
 #define tp std::chrono::high_resolution_clock::time_point
+#define ITERATIONS 10
 
 double get_rand() {
-    return 1 + (std::rand() % 5);
+    return 1.0 + (std::rand() / (float)RAND_MAX) * 5;
 }
 
 void execute(double* vecA, double* vecB, double* vecC, int N) {
@@ -65,7 +67,7 @@ bool diff(double* arr1, double* arr2, int N) {
 }
 
 int main(int argc, char** argv) {
-    omp_set_num_threads(8);
+    omp_set_num_threads(2);
 
     srand((unsigned) time(NULL));
     int N = atoi(argv[1]);
@@ -79,10 +81,8 @@ int main(int argc, char** argv) {
     
 
     for(int i = 0; i < N*N; i++) {
-        // vecA[i] = get_rand();
-        // vecB[i] = get_rand();
-        vecA[i] = 2;
-        vecB[i] = 2;
+        vecA[i] = get_rand();
+        vecB[i] = get_rand();
         vecC[i] = 0;
         vecA_seq[i] = vecA[i];
         vecB_seq[i] = vecB[i];
@@ -91,11 +91,16 @@ int main(int argc, char** argv) {
 
     execute(vecA_seq, vecB_seq, vecC_seq, N);
 
-    tp t1 = std::chrono::high_resolution_clock::now();
+    double t1 = omp_get_wtime();
 
-    block_matrix_multiplication(vecA, vecB, vecC, N, K);
+    
+    for (int i = 0; i < ITERATIONS; i++)
+    {
+        memset(vecC,0,sizeof(double)*N*N);
+        block_matrix_multiplication(vecA, vecB, vecC, N, K);
+    }
 
-    tp t2 = std::chrono::high_resolution_clock::now();
+    double t2 = omp_get_wtime();
 
     // for(int i = 0; i < N; i++) {
     //     for(int j = 0; j < N; j++) {
@@ -138,9 +143,12 @@ int main(int argc, char** argv) {
         printf("\nZGODNE!!!\n");
     }
 
-    printf("time (s): %lf\n", std::chrono::duration<double>(t2-t1).count());
+    printf("time (s): %lf\n", (t2-t1)/ITERATIONS);
 
     delete[] vecA;
     delete[] vecB;
     delete[] vecC;
+    delete[] vecA_seq;
+    delete[] vecB_seq;
+    delete[] vecC_seq;
 }
